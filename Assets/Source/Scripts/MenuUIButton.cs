@@ -1,17 +1,16 @@
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MenuUIButton : MonoBehaviour
 {
     [SerializeField] private Button button;
-    [SerializeField] private TextMeshProUGUI priceText;
-    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private Text priceText;
+    [SerializeField] private Text levelText;
 
     public Button Button => button;
-    public TextMeshProUGUI PriceText => priceText;
-    public TextMeshProUGUI LevelText => levelText;
+    public Text PriceText => priceText;
+    public Text LevelText => levelText;
     
     private void OnEnable()
     {

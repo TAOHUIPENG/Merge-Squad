@@ -4,6 +4,7 @@ using D2D.Utilities;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PunchMode
 {
@@ -17,7 +18,7 @@ namespace D2D.UI
 {
     public abstract class TrackableValueUI<T> : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _label;
+        [SerializeField] private Text _label;
         [SerializeField] private Transform _icon;
 
         [Space]

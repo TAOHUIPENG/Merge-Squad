@@ -1,15 +1,15 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 using static D2D.Utilities.CommonGameplayFacade;
 
 public class PowerText : MonoBehaviour
 {
-    private TextMeshProUGUI textPro;
+    private Text textPro;
 
     private void Awake()
     {
-        textPro = GetComponent<TextMeshProUGUI>();
+        textPro = GetComponent<Text>();
 
         //UpdatePowerText(0);
 
