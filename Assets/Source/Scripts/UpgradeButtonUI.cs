@@ -1,13 +1,14 @@
 using System;
 using D2D.Utilities;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeButtonUI : MonoBehaviour
 {
     [SerializeField] private Image upgradeIcon;
-    [SerializeField] private Text upgradeText;
+    [SerializeField] private TextMeshProUGUI upgradeText;
     [SerializeField] private Button upgradeButton;
 
     public Button UpgradeButton => upgradeButton;

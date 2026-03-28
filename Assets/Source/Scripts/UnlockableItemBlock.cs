@@ -3,6 +3,7 @@ using D2D.Core;
 using D2D.Utilities;
 using DG.Tweening;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,7 @@ public class UnlockableItemBlock : GameStateMachineUser
     [SerializeField] private Image unlockFill;
     [SerializeField] private Image unlockOutline;
     [SerializeField] private Image godrays;
-    [SerializeField] private Text unlockText;
+    [SerializeField] private TextMeshProUGUI unlockText;
     [SerializeField] private CanvasGroup finishButton;
 
     [Header("Fill Settings")]
