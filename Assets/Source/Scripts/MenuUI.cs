@@ -1,10 +1,6 @@
 using D2D.Core;
-using D2D.Utilities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 using static D2D.Utilities.CommonGameplayFacade;
 
 /// <summary>
@@ -49,7 +45,11 @@ public class MenuUI : MonoBehaviour
         // 原有按钮逻辑
         fireRateIncreaseButton.Button.onClick.AddListener(IncreaseFireRate);
         firePowerIncreaseButton.Button.onClick.AddListener(IncreasePowerUp);
-        continueButton.onClick.AddListener(() => _stateMachine.Push(new RunningState()));
+        continueButton.onClick.AddListener(() =>
+        {
+            _stateMachine.Push(new RunningState());
+            UIGame.Instance?.Show();
+        });
 
         // 功能按钮绑定
         if (signInButton != null)
@@ -79,7 +79,7 @@ public class MenuUI : MonoBehaviour
     private void OnSignInClicked()
     {
         if (signInUI != null)
-            signInUI.gameObject.SetActive(true);
+            ShowPanel(signInUI.gameObject);
         else
             Debug.LogWarning("MenuUI: signInUI 未绑定");
     }
@@ -105,7 +105,7 @@ public class MenuUI : MonoBehaviour
     private void OnShareClicked()
     {
         if (shareUI != null)
-            shareUI.gameObject.SetActive(true);
+            ShowPanel(shareUI.gameObject);
         else
             Debug.LogWarning("MenuUI: shareUI 未绑定");
     }
@@ -113,9 +113,67 @@ public class MenuUI : MonoBehaviour
     private void OnAddStaminaClicked()
     {
         if (staminaPopupUI != null)
-            staminaPopupUI.gameObject.SetActive(true);
+            ShowPanel(staminaPopupUI.gameObject);
         else
             Debug.LogWarning("MenuUI: staminaPopupUI 未绑定");
+    }
+
+    /// <summary>
+    /// 安全地显示一个弹窗面板。
+    ///
+    /// 【死循环根因】
+    /// 若直接在 while 循环中调用 parent.SetActive(true) 来激活父节点，
+    /// 且父节点上带有 GameStateMachineUser（如 UIGame），
+    /// 则 SetActive(true) → OnEnable → BindCallbacks → On&lt;PauseState&gt;(OnGamePause)，
+    /// 若当前状态已是 PauseState，GSM 会立刻触发 OnGamePause → SetActive(false)，
+    /// 循环再次判断 !activeSelf → SetActive(true) → 无限死循环，编辑器卡死。
+    ///
+    /// 【正确方案】
+    /// 不激活父节点，而是将弹窗移到根 Canvas 层级，
+    /// 使其脱离受游戏状态控制的父节点层级，再执行 SetActive(true)。
+    /// 根本建议：在场景中把所有弹窗直接放在 Canvas 的直接子节点下。
+    /// </summary>
+    private void ShowPanel(GameObject panel)
+    {
+        if (panel == null) return;
+
+        // 若父节点链路中存在未激活节点，将面板移至根 Canvas 层级
+        if (HasInactiveParentBeforeCanvas(panel.transform))
+        {
+            Canvas rootCanvas = GetRootCanvas();
+            if (rootCanvas != null && panel.transform.parent != rootCanvas.transform)
+            {
+                Debug.LogWarning($"[MenuUI] '{panel.name}' 父节点未激活，已自动移至根 Canvas 层级。" +
+                                 "建议在场景中将此面板直接放置于 Canvas 的直接子节点下，避免被其他界面的显隐逻辑影响。");
+                panel.transform.SetParent(rootCanvas.transform, false);
+            }
+        }
+
+        panel.SetActive(true);
+    }
+
+    /// <summary>
+    /// 检查 t 向上到 Canvas 之间是否存在未激活的父节点
+    /// </summary>
+    private static bool HasInactiveParentBeforeCanvas(Transform t)
+    {
+        Transform p = t.parent;
+        while (p != null && p.GetComponent<Canvas>() == null)
+        {
+            if (!p.gameObject.activeSelf) return true;
+            p = p.parent;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 获取 MenuUI 所在的根 Canvas
+    /// </summary>
+    private Canvas GetRootCanvas()
+    {
+        // MenuUI 自身处于激活链路中，直接向上找即可
+        Canvas c = GetComponentInParent<Canvas>();
+        return c != null ? c : FindObjectOfType<Canvas>();
     }
 
     // ---- 信息刷新 ----

@@ -22,6 +22,8 @@ public class FailUI : GameStateMachineUser
         earnedCoins = _db != null ? _db.Money.Value : 0;
         RefreshUI();
         gameObject.SetActive(true);
+        // 游戏结束，隐藏游戏 HUD
+        UIGame.Instance?.Hide();
     }
 
     private void Start()
