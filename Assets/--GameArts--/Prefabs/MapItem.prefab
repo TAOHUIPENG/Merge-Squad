@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 1881281676346906846}
   - component: {fileID: 2300768079927212958}
   - component: {fileID: 8994426601384267173}
+  - component: {fileID: 722789721022207956}
   m_Layer: 5
   m_Name: MapItem
   m_TagString: Untagged
@@ -467,6 +468,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &722789721022207956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787545633309998569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66c19bfca28a46839f101525abbb4644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgClaimed: {fileID: 3166458020894156019}
+  bgUnclaimed: {fileID: 1256394614021948356}
+  bgLight: {fileID: 5827048971246046350}
+  iconClaimed: {fileID: 6640070240555810490}
+  iconUnclaimed: {fileID: 7088151764909381833}
+  rewardText: {fileID: 6233984854582282191}
+  dayText: {fileID: 3949368719235358008}
 --- !u!1 &7088151764909381833
 GameObject:
   m_ObjectHideFlags: 0

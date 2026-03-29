@@ -4479,6 +4479,19 @@ MonoBehaviour:
   fireRateIncreaseButton: {fileID: 7165182584738704275}
   firePowerIncreaseButton: {fileID: 3412514028345691768}
   continueButton: {fileID: 1175402880862954740}
+  signInButton: {fileID: 0}
+  terrainSelectButton: {fileID: 0}
+  entranceRewardButton: {fileID: 0}
+  addGiftButton: {fileID: 0}
+  shareButton: {fileID: 0}
+  addStaminaButton: {fileID: 0}
+  staminaText: {fileID: 0}
+  coinText: {fileID: 0}
+  userAvatar: {fileID: 0}
+  nicknameText: {fileID: 0}
+  signInUI: {fileID: 0}
+  shareUI: {fileID: 0}
+  staminaPopupUI: {fileID: 0}
 --- !u!114 &2018047083702995035
 MonoBehaviour:
   m_ObjectHideFlags: 0
