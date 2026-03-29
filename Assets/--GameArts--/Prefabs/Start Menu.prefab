@@ -63,6 +63,7 @@ GameObject:
   - component: {fileID: 8964526227041059003}
   - component: {fileID: 6672069216577868674}
   - component: {fileID: 3502134026707829316}
+  - component: {fileID: 4472730516985825149}
   m_Layer: 5
   m_Name: Icon_Money
   m_TagString: Untagged
@@ -192,6 +193,50 @@ MonoBehaviour:
   _isPunchUI: 0
   _vibratio: 0
   _elasity: 0
+--- !u!114 &4472730516985825149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398796932155777247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 8964526227041059003}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &408313371438341264
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -757,7 +802,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 7881846738961764506}
   priceText: {fileID: 5480734005187906804}
-  levelText: {fileID: 0}
+  levelText: {fileID: 5480734005187906804}
 --- !u!1 &1157492281171540381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2528,7 +2573,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 87.549995, y: -33.119995}
-  m_SizeDelta: {x: 44, y: 60}
+  m_SizeDelta: {x: 45.675003, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5584668077398258552
 CanvasRenderer:
@@ -3987,7 +4032,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 87.549995, y: -26.414993}
-  m_SizeDelta: {x: 44, y: 60}
+  m_SizeDelta: {x: 45.675003, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1535082148981410231
 CanvasRenderer:
@@ -4479,16 +4524,16 @@ MonoBehaviour:
   fireRateIncreaseButton: {fileID: 7165182584738704275}
   firePowerIncreaseButton: {fileID: 3412514028345691768}
   continueButton: {fileID: 1175402880862954740}
-  signInButton: {fileID: 0}
-  terrainSelectButton: {fileID: 0}
-  entranceRewardButton: {fileID: 0}
-  addGiftButton: {fileID: 0}
-  shareButton: {fileID: 0}
-  addStaminaButton: {fileID: 0}
-  staminaText: {fileID: 0}
+  signInButton: {fileID: 7381387212126041994}
+  terrainSelectButton: {fileID: 7639485573043161930}
+  entranceRewardButton: {fileID: 2239891157776735947}
+  addGiftButton: {fileID: 9021505652598888977}
+  shareButton: {fileID: 1287206803539614658}
+  addStaminaButton: {fileID: 4472730516985825149}
+  staminaText: {fileID: 5590659411764259706}
   coinText: {fileID: 0}
-  userAvatar: {fileID: 0}
-  nicknameText: {fileID: 0}
+  userAvatar: {fileID: 297042533708401111}
+  nicknameText: {fileID: 5472451556263936104}
   signInUI: {fileID: 0}
   shareUI: {fileID: 0}
   staminaPopupUI: {fileID: 0}

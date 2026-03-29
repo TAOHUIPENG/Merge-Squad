@@ -240,10 +240,10 @@ public class MenuUI : MonoBehaviour
         _db.PowerIncreasePercent.Value = _gameData.upgradesPercentByLevel[(int)_db.PowerIncreaseLevel.Value] / 100;
         _db.FireRateDecreasePercent.Value = _gameData.upgradesPercentByLevel[(int)_db.FireRateDecreaseLevel.Value] / 100;
 
-        firePowerIncreaseButton.LevelText.text = $"LEVEL {_db.PowerIncreaseLevel.Value}";
-        fireRateIncreaseButton.LevelText.text = $"LEVEL {_db.FireRateDecreaseLevel.Value}";
-        firePowerIncreaseButton.PriceText.text = $"{_gameData.PowerNextUpgradePrice} <sprite=0>";
-        fireRateIncreaseButton.PriceText.text = $"{_gameData.FireNextUpgradePrice} <sprite=0>";
+        firePowerIncreaseButton.LevelText.text = $"等级 {_db.PowerIncreaseLevel.Value}";
+        fireRateIncreaseButton.LevelText.text = $"等级 {_db.FireRateDecreaseLevel.Value}";
+        firePowerIncreaseButton.PriceText.text = $"{_gameData.PowerNextUpgradePrice}";
+        fireRateIncreaseButton.PriceText.text = $"{_gameData.FireNextUpgradePrice} ";
 
         CheckForDeactivatingButtons();
     }
