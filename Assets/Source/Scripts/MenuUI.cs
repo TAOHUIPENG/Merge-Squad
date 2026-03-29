@@ -9,8 +9,8 @@ using static D2D.Utilities.CommonGameplayFacade;
 
 public class MenuUI : MonoBehaviour
 {
-    [SerializeField] private MenuUIButton fireRateIncreaseButton;
-    [SerializeField] private MenuUIButton firePowerIncreaseButton;
+    [SerializeField] private MenuUIButton1 fireRateIncreaseButton;
+    [SerializeField] private MenuUIButton1 firePowerIncreaseButton;
     [SerializeField] private Button continueButton;
 
     private void Start()
