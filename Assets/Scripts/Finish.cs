@@ -13,7 +13,8 @@ namespace D2D
         protected override void OnInteract(Player player)
         {
             this.FindLazy<GameStateMachine>().Push(new WinState());
-            
+            WinUI.Instance?.Show();
+
             // Confetti, win camera, etc.
             _activateOnWin.On();
         }

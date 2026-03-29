@@ -203,7 +203,7 @@ public class SquadComponent : GameStateMachineUser
             if (squadMembers.Count <= 0)
             {
                 _stateMachine.Push(new LoseState());
-
+                FailUI.Instance?.Show();
                 return;
             }
 

@@ -26,11 +26,16 @@ public class SignInUI : MonoBehaviour
     [SerializeField] private Text resultText;
     [SerializeField] private Button resultCloseButton;
 
+    [Header("动画")]
+    [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
+    [SerializeField] private Transform panelRoot;
+
     private int currentDayIndex;
     private bool hasClaimedToday;
 
     private void OnEnable()
     {
+        PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
         LoadData();
         RefreshAllItems();
         UpdateSignInButtonState();

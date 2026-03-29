@@ -1,28 +1,31 @@
-using D2D.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using static D2D.Utilities.CommonGameplayFacade;
 
 /// <summary>
 /// 成功界面 - 获得奖励文本/看广告双倍奖励
+/// 由外部在 Push(WinState) 后直接调用 WinUI.Instance.Show()
 /// </summary>
-public class WinUI : GameStateMachineUser
+public class WinUI : MonoBehaviour
 {
+    public static WinUI Instance { get; private set; }
+
     [Header("文本")]
-    [SerializeField] private Text rewardText;             // 获得奖励文本
+    [SerializeField] private Text rewardText;
 
     [Header("按钮")]
-    [SerializeField] private Button doubleRewardButton;   // 看广告双倍奖励
+    [SerializeField] private Button doubleRewardButton;
+
+    [Header("动画")]
+    [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
+    [SerializeField] private Transform panelRoot;
 
     private float earnedReward;
 
-    protected override void OnGameWin()
+    private void Awake()
     {
-        earnedReward = _db != null ? _db.Money.Value : 0;
-        RefreshUI();
-        gameObject.SetActive(true);
-        // 游戏结束，隐藏游戏 HUD
-        UIGame.Instance?.Hide();
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
     }
 
     private void Start()
@@ -33,6 +36,29 @@ public class WinUI : GameStateMachineUser
         gameObject.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+
+    // ── 公开接口 ─────────────────────────────────────────
+
+    public void Show()
+    {
+        earnedReward = _db != null ? _db.Money.Value : 0;
+        RefreshUI();
+        UIGame.Instance?.Hide();
+        gameObject.SetActive(true);
+        // OnEnable 触发动画
+    }
+
+    private void OnEnable()
+    {
+        PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
+    }
+
+    // ── 内部逻辑 ─────────────────────────────────────────
+
     private void RefreshUI()
     {
         if (rewardText != null)
@@ -42,8 +68,7 @@ public class WinUI : GameStateMachineUser
     private void OnDoubleReward()
     {
         Debug.Log("WinUI: 看广告双倍奖励 - 请接入广告SDK");
-        // TODO: 广告SDK播放，广告完成后调用 OnDoubleRewardAdComplete()
-        // OnDoubleRewardAdComplete();
+        // TODO: 广告完成后调用 OnDoubleRewardAdComplete()
     }
 
     private void OnDoubleRewardAdComplete()
@@ -54,4 +79,3 @@ public class WinUI : GameStateMachineUser
         gameObject.SetActive(false);
     }
 }
-

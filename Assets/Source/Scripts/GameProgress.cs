@@ -111,6 +111,7 @@ public class GameProgress : GameStateMachineUser
             if (levelTime >= _levelSO.TotalDuration)
             {
                 _stateMachine.Push(new WinState());
+                WinUI.Instance?.Show();
             }
         }
     }
@@ -152,6 +153,7 @@ public class GameProgress : GameStateMachineUser
         if (totalXP >= needToFinish)
         {
             _stateMachine.Push(new WinState());
+            WinUI.Instance?.Show();
         }
     }
 

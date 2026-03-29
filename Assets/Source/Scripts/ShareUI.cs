@@ -13,6 +13,10 @@ public class ShareUI : MonoBehaviour
     [SerializeField] private Button shareQQButton;
     [SerializeField] private Button shareWeiboButton;
 
+    [Header("动画")]
+    [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
+    [SerializeField] private Transform panelRoot;
+
     private void Start()
     {
         if (closeButton != null)
@@ -31,6 +35,11 @@ public class ShareUI : MonoBehaviour
             shareWeiboButton.onClick.AddListener(() => OnShare("微博"));
     }
 
+    private void OnEnable()
+    {
+        PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
+    }
+
     private void OnShare(string platform)
     {
         Debug.Log($"ShareUI: 分享到{platform} - 请接入对应平台分享SDK");
@@ -38,4 +47,3 @@ public class ShareUI : MonoBehaviour
         // 分享成功后可给予奖励
     }
 }
-

@@ -14,6 +14,10 @@ public class StaminaPopupUI : MonoBehaviour
     [Header("每次广告获得体力")]
     [SerializeField] private int staminaRewardPerAd = 3;
 
+    [Header("动画")]
+    [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
+    [SerializeField] private Transform panelRoot;
+
     // 体力存储Key
     private const string StaminaKey = "Player_Stamina";
     private const int MaxStamina = 10;
@@ -25,6 +29,11 @@ public class StaminaPopupUI : MonoBehaviour
 
         if (watchAdButton != null)
             watchAdButton.onClick.AddListener(OnWatchAd);
+    }
+
+    private void OnEnable()
+    {
+        PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
     }
 
     private void OnWatchAd()
@@ -46,4 +55,3 @@ public class StaminaPopupUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 }
-
