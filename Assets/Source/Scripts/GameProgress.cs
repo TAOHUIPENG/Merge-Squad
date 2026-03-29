@@ -107,10 +107,17 @@ public class GameProgress : GameStateMachineUser
         XPforLevelUp   = 0f;
         totalXP        = 0f;
         isFinished     = false;
-        isStarted      = true; // 保持运行，不需要重新 Push RunningState
-
-        // 重新随机下次升级间隔
+        isStarted      = true;
         timeForLevelUp = levelUpTimeRange.RandomFloat();
+    }
+
+    /// <summary>
+    /// 复活后恢复游戏计时（不重置关卡进度）
+    /// </summary>
+    public void Revive()
+    {
+        isFinished = false;
+        isStarted  = true;
     }
     private void Update()
     {

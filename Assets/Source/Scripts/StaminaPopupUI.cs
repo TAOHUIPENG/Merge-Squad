@@ -7,20 +7,25 @@ using static D2D.Utilities.CommonGameplayFacade;
 /// </summary>
 public class StaminaPopupUI : MonoBehaviour
 {
+    // ── 单例（方便其他 UI 直接访问）──────────────────────
+    public static StaminaPopupUI Instance { get; private set; }
+
     [Header("按钮")]
     [SerializeField] private Button closeButton;
     [SerializeField] private Button watchAdButton;
 
-    [Header("每次广告获得体力")]
-    [SerializeField] private int staminaRewardPerAd = 3;
+    [Header("体力文本（可选）")]
+    [SerializeField] private Text staminaText;
 
     [Header("动画")]
     [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
     [SerializeField] private Transform panelRoot;
 
-    // 体力存储Key
-    private const string StaminaKey = "Player_Stamina";
-    private const int MaxStamina = 10;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -31,27 +36,40 @@ public class StaminaPopupUI : MonoBehaviour
             watchAdButton.onClick.AddListener(OnWatchAd);
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+
     private void OnEnable()
     {
         PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
+        RefreshStaminaText();
+    }
+
+    private void RefreshStaminaText()
+    {
+        if (staminaText != null)
+            staminaText.text = $"{StaminaManager.Get()}/{StaminaManager.MaxStamina}";
     }
 
     private void OnWatchAd()
     {
-        // TODO: 接入广告SDK，广告播放完成后调用 OnAdComplete()
         Debug.Log("StaminaPopupUI: 请接入广告SDK后在此处播放广告");
-        // 模拟广告完成：
+        // TODO: 广告播放完成后调用 OnAdComplete()
         OnAdComplete();
     }
 
     private void OnAdComplete()
     {
-        int current = PlayerPrefs.GetInt(StaminaKey, MaxStamina);
-        current = Mathf.Min(current + staminaRewardPerAd, MaxStamina);
-        PlayerPrefs.SetInt(StaminaKey, current);
-        PlayerPrefs.Save();
+        StaminaManager.Add(StaminaManager.AdReward);
+        Debug.Log($"StaminaPopupUI: 体力+{StaminaManager.AdReward}，当前体力={StaminaManager.Get()}");
+        RefreshStaminaText();
 
-        Debug.Log($"StaminaPopupUI: 体力+{staminaRewardPerAd}，当前体力={current}");
+        // 通知 MenuUI 同步刷新体力显示
+        var menuUI = FindObjectOfType<MenuUI>();
+        menuUI?.OnStaminaChanged();
+
         gameObject.SetActive(false);
     }
 }

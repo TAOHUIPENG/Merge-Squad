@@ -48,8 +48,9 @@ public class WinUI : MonoBehaviour
         earnedReward = _db != null ? _db.Money.Value : 0;
         RefreshUI();
         UIGame.Instance?.Hide();
+        // 通关奖励 +2 体力
+        StaminaManager.Add(StaminaManager.WinReward);
         gameObject.SetActive(true);
-        // OnEnable 触发动画
     }
 
     private void OnEnable()

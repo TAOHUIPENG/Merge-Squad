@@ -343,6 +343,18 @@ public class SquadComponent : GameStateMachineUser
 
         SpawnLvlUpVFX();
     }
+
+    /// <summary>
+    /// 将所有小队成员的血量恢复至满（用于复活）
+    /// </summary>
+    public void FullHealSquad()
+    {
+        foreach (var member in squadMembers)
+        {
+            if (member != null && member.health != null)
+                member.health.SetMaxPoints(member.health.MaxPoints, needRefill: true);
+        }
+    }
     public void DoubleEveryMember()
     {
         var squadMembersCopy = new List<SquadMember>(squadMembers);

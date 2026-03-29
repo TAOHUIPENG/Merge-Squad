@@ -116,19 +116,28 @@ public class EnemySpawn : Unit
     /// </summary>
     public void ResetSpawner()
     {
-        // 清除所有场上的敌人
         foreach (var enemy in FindObjectsOfType<EnemyComponent>())
             Destroy(enemy.gameObject);
 
-        // 重置计数与计时
         currentAmount    = 0;
         currentWaveTimer = 0f;
         currentLevelTimer = 0f;
         timer            = 0f;
         isStopped        = false;
 
-        // 回到第一波
         SetWave(_gameData.firstWave);
+    }
+
+    /// <summary>
+    /// 复活专用：清空场上敌人并恢复生成，不重置关卡计时。
+    /// </summary>
+    public void ReviveSpawner()
+    {
+        foreach (var enemy in FindObjectsOfType<EnemyComponent>())
+            Destroy(enemy.gameObject);
+
+        currentAmount = 0;
+        isStopped     = false;
     }
     public void EnemyDied()
     {

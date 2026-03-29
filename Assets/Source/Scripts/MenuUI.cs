@@ -36,20 +36,13 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private ShareUI shareUI;
     [SerializeField] private StaminaPopupUI staminaPopupUI;
 
-    // 体力存储Key（与StaminaPopupUI保持一致）
-    private const string StaminaKey = "Player_Stamina";
-    private const int MaxStamina = 10;
 
     private void Start()
     {
         // 原有按钮逻辑
         fireRateIncreaseButton.Button.onClick.AddListener(IncreaseFireRate);
         firePowerIncreaseButton.Button.onClick.AddListener(IncreasePowerUp);
-        continueButton.onClick.AddListener(() =>
-        {
-            _stateMachine.Push(new RunningState());
-            UIGame.Instance?.Show();
-        });
+        continueButton.onClick.AddListener(OnContinueClicked);
 
         // 功能按钮绑定
         if (signInButton != null)
@@ -73,6 +66,33 @@ public class MenuUI : MonoBehaviour
         UpdateStats();
         RefreshDisplay();
     }
+
+    private void OnEnable()
+    {
+        RefreshDisplay();
+    }
+
+    // ---- 开始游戏 ----
+
+    private void OnContinueClicked()
+    {
+        if (!StaminaManager.CanStartGame())
+        {
+            if (staminaPopupUI != null)
+                ShowPanel(staminaPopupUI.gameObject);
+            else
+                Debug.LogWarning("MenuUI: 体力不足，且 staminaPopupUI 未绑定");
+            return;
+        }
+
+        StaminaManager.ConsumeForGame();
+        RefreshDisplay();
+        _stateMachine.Push(new RunningState());
+        UIGame.Instance?.Show();
+    }
+
+    /// <summary>由 StaminaPopupUI 等外部调用，同步刷新体力显示</summary>
+    public void OnStaminaChanged() => RefreshDisplay();
 
     // ---- 功能按钮回调 ----
 
@@ -184,12 +204,9 @@ public class MenuUI : MonoBehaviour
         if (coinText != null && _db != null)
             coinText.text = $"{_db.Money.Value:0}";
 
-        // 体力
+        // 体力（通过 StaminaManager 获取，自动结算离线回复）
         if (staminaText != null)
-        {
-            int stamina = PlayerPrefs.GetInt(StaminaKey, MaxStamina);
-            staminaText.text = $"{stamina}/{MaxStamina}";
-        }
+            staminaText.text = $"{StaminaManager.Get()}/{StaminaManager.MaxStamina}";
 
         // 昵称（默认值，接入SDK后替换）
         if (nicknameText != null && nicknameText.text == string.Empty)

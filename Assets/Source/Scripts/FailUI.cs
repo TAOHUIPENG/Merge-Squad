@@ -5,7 +5,7 @@ using static D2D.Utilities.CommonGameplayFacade;
 
 /// <summary>
 /// 失败界面 - 看广告复活/2倍奖励/当前金币文本
-/// 由外部在 Push(LoseState) 后直接调用 FailUI.Instance.Show()
+/// 复活流程：清空敌人 → 小队满血 → 恢复计时 → 推入 RunningState
 /// </summary>
 public class FailUI : MonoBehaviour
 {
@@ -54,7 +54,6 @@ public class FailUI : MonoBehaviour
         RefreshUI();
         UIGame.Instance?.Hide();
         gameObject.SetActive(true);
-        // OnEnable 触发动画
     }
 
     private void OnEnable()
@@ -73,13 +72,29 @@ public class FailUI : MonoBehaviour
     private void OnReviveAd()
     {
         Debug.Log("FailUI: 看广告复活 - 请接入广告SDK");
-        // TODO: 广告完成后调用 OnReviveAdComplete()
+        // TODO: 广告SDK完成回调后调用 OnReviveAdComplete()
+        // 模拟广告完成：
+        OnReviveAdComplete();
     }
 
     private void OnReviveAdComplete()
     {
+        // 1. 清空场上所有敌人（减轻复活压力），但保留关卡计时
+        _enemySpawn?.ReviveSpawner();
+
+        // 2. 小队全员血量回满
+        _squad?.FullHealSquad();
+
+        // 3. 恢复 GameProgress 计时（isFinished → false）
+        _gameProgress?.Revive();
+
+        // 4. 关闭失败界面
         gameObject.SetActive(false);
+
+        // 5. 重新推入 RunningState（LoseState → RunningState 合法）
         _stateMachine.Push(new RunningState());
+
+        // 6. 恢复游戏 HUD
         UIGame.Instance?.Show();
     }
 

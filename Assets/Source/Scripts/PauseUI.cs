@@ -19,6 +19,9 @@ public class PauseUI : MonoBehaviour
     [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
     [SerializeField] private Transform panelRoot;
 
+    [Header("体力不足弹窗")]
+    [SerializeField] private StaminaPopupUI staminaPopupUI;
+
     private void Start()
     {
         if (restartButton != null)
@@ -41,6 +44,21 @@ public class PauseUI : MonoBehaviour
 
     private void OnRestart()
     {
+        if (!StaminaManager.CanStartGame())
+        {
+            // 体力不足：保持暂停界面，在其上方弹出体力补充弹窗
+            StaminaPopupUI popup = staminaPopupUI != null
+                ? staminaPopupUI
+                : StaminaPopupUI.Instance;
+
+            if (popup != null)
+                popup.gameObject.SetActive(true);
+            else
+                Debug.LogWarning("PauseUI: 体力不足，且 staminaPopupUI 未绑定");
+            return;
+        }
+
+        StaminaManager.ConsumeForGame();
         ResumeTime();
         gameObject.SetActive(false);
         // 不重新加载场景，通过 LevelRestarter 原地重置关卡
