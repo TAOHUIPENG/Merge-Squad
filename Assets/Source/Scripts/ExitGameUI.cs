@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 退出游戏确认界面 - 取消/确认
+/// 退出当前关卡确认界面 - 取消（继续游戏）/ 确认（返回主界面）
 /// 打开时暂停游戏（timeScale=0），取消时恢复（timeScale=1）
 /// </summary>
 public class ExitGameUI : MonoBehaviour
@@ -14,6 +15,10 @@ public class ExitGameUI : MonoBehaviour
     [Header("动画")]
     [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
     [SerializeField] private Transform panelRoot;
+
+    [Header("主界面场景")]
+    [Tooltip("确认退出后要加载的场景名，留空则重新加载当前场景（单场景工程适用）")]
+    [SerializeField] private string menuSceneName = "";
 
     private void Start()
     {
@@ -44,10 +49,12 @@ public class ExitGameUI : MonoBehaviour
     private void OnConfirm()
     {
         Time.timeScale = 1f;
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+
+        // 加载指定场景；未填写则重新加载当前场景（回到菜单 PauseState）
+        string target = string.IsNullOrEmpty(menuSceneName)
+            ? SceneManager.GetActiveScene().name
+            : menuSceneName;
+
+        SceneManager.LoadScene(target);
     }
 }

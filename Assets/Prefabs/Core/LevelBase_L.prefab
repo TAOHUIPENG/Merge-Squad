@@ -46998,6 +46998,7 @@ MonoBehaviour:
   cancelButton: {fileID: 3766394653653104875}
   confirmButton: {fileID: 1933188477690443718}
   panelRoot: {fileID: 0}
+  menuSceneName: 
 --- !u!224 &1636697689506925794 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 940802284157411169, guid: 276132cd800ba24459213723be247091, type: 3}

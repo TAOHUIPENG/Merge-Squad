@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using D2D.Common;
 using D2D.Utilities;
 using D2D.Core;
@@ -8,7 +9,6 @@ using UnityEngine;
 using static D2D.Utilities.SettingsFacade;
 using static D2D.Utilities.CommonLazyFacade;
 using static D2D.Utilities.CommonGameplayFacade;
-using System.Collections.Generic;
 
 namespace D2D.Databases
 {
@@ -16,10 +16,10 @@ namespace D2D.Databases
     {
         #region For analytics
 
-        public readonly DataContainer<int> Reloads = 
+        public readonly DataContainer<int> Reloads =
             new DataContainer<int>("ReloadsCount", 0);
-        
-        public readonly DataContainer<int> CompletedLevelsPerSession = 
+
+        public readonly DataContainer<int> CompletedLevelsPerSession =
             new DataContainer<int>("CompletedLevelsPerSession", 0);
 
         #endregion
@@ -46,19 +46,25 @@ namespace D2D.Databases
         public readonly DataContainer<string> LastUnlockedMember =
             new DataContainer<string>("LastUnlockedMember", "");
 
+        // ── UnlockedMembers（List<string>，PlayerPrefs + JSON）──────────
+
         public List<string> UnlockedMembers
         {
             get
             {
-                if (ES3.KeyExists(UnlockedMembersKey))
+                if (_UnlockedMembers != null)
+                    return _UnlockedMembers;
+
+                if (PlayerPrefs.HasKey(UnlockedMembersKey))
                 {
-                    _UnlockedMembers = ES3.Load<List<string>>(UnlockedMembersKey);
+                    var wrapper = JsonUtility.FromJson<StringListWrapper>(
+                        PlayerPrefs.GetString(UnlockedMembersKey));
+                    _UnlockedMembers = wrapper?.list ?? new List<string>();
                 }
                 else
                 {
                     _UnlockedMembers = new List<string>();
-
-                    ES3.Save(UnlockedMembersKey, _UnlockedMembers);
+                    SaveMembers();
                 }
 
                 return _UnlockedMembers;
@@ -67,20 +73,31 @@ namespace D2D.Databases
 
         private List<string> _UnlockedMembers;
 
-        public void SaveMembers() => ES3.Save(UnlockedMembersKey, _UnlockedMembers);
+        public void SaveMembers()
+        {
+            var wrapper = new StringListWrapper { list = _UnlockedMembers ?? new List<string>() };
+            PlayerPrefs.SetString(UnlockedMembersKey, JsonUtility.ToJson(wrapper));
+            PlayerPrefs.Save();
+        }
+
+        [Serializable]
+        private class StringListWrapper
+        {
+            public List<string> list = new List<string>();
+        }
 
         private const string UnlockedMembersKey = "UnlockedMembers";
 
-        // Common Vars
-        public readonly DataContainer<int> PassedLevels = 
+        // ── Common Vars ──────────────────────────────────────────────────
+
+        public readonly DataContainer<int> PassedLevels =
             new DataContainer<int>("PassedLevels", 0);
-        
+
         public readonly TrackableValue<float> Money =
             new TrackableValue<float>(value: 0, firstGet: () => PlayerPrefs.GetInt("Money"));
-        
-        public readonly DataContainer<int> LastSceneNumber 
-            = new DataContainer<int>("LastSceneNumber", 1);
 
+        public readonly DataContainer<int> LastSceneNumber =
+            new DataContainer<int>("LastSceneNumber", 1);
 
         public float TimeOfSceneLoad { get; private set; }
 
@@ -95,7 +112,6 @@ namespace D2D.Databases
         protected override void OnEnable()
         {
             base.OnEnable();
-            
             Money.Changed += SaveMoney;
             TimeOfSceneLoad = Time.time;
         }
@@ -103,13 +119,13 @@ namespace D2D.Databases
         protected override void OnDisable()
         {
             base.OnDisable();
-            
             Money.Changed -= SaveMoney;
         }
 
         private void SaveMoney(float val)
         {
             PlayerPrefs.SetInt("Money", Money.Value.Round());
+            PlayerPrefs.Save();
         }
 
         private void OnApplicationQuit()
@@ -123,29 +139,30 @@ namespace D2D.Databases
             if (level != null)
                 LastSceneNumber.Value = level.SceneNumber;
         }
-        
+
         protected override void OnGameWin()
         {
             CompletedLevelsPerSession.Value++;
             PassedLevels.Value++;
         }
-        
+
+        /// <summary>重置所有游戏进度数据</summary>
         public static void Clear()
         {
-            ES3.Save("ReloadsCount", 0);
-            ES3.Save("CompletedLevelsPerSession", 0);
-            ES3.Save("PassedLevels", 0);
-            ES3.Save("LastSceneNumber", 1);
-            ES3.Save("PassedLevels", 0);
-            ES3.Save("LastSceneNumber", 1);
-            ES3.Save("PowerIncreaseLevel", 0f);
-            ES3.Save("FireRateDecreaseLevel", 0f);
-            ES3.Save("UnlockableItemProgress", 0f);
-            ES3.Save("UnlockableItem", "");
-            ES3.Save("LastUnlockedMember", "");
-            ES3.Save(UnlockedMembersKey, new List<string>());
-
+            PlayerPrefs.SetInt("ReloadsCount", 0);
+            PlayerPrefs.SetInt("CompletedLevelsPerSession", 0);
+            PlayerPrefs.SetInt("PassedLevels", 0);
+            PlayerPrefs.SetInt("LastSceneNumber", 1);
+            PlayerPrefs.SetFloat("PowerIncreasePercent", 0f);
+            PlayerPrefs.SetFloat("FireRateDecreasePercent", 0f);
+            PlayerPrefs.SetFloat("PowerIncreaseLevel", 0f);
+            PlayerPrefs.SetFloat("FireRateDecreaseLevel", 0f);
+            PlayerPrefs.SetFloat("UnlockableItemProgress", 0f);
+            PlayerPrefs.SetString("UnlockableItem", "");
+            PlayerPrefs.SetString("LastUnlockedMember", "");
+            PlayerPrefs.SetString("UnlockedMembers", "");
             PlayerPrefs.SetInt("Money", 0);
+            PlayerPrefs.Save();
         }
     }
 }
