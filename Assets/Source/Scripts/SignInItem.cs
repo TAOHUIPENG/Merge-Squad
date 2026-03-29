@@ -34,11 +34,12 @@ public class SignInItem : MonoBehaviour
         if (rewardText != null)
             rewardText.text = $"+{reward}";
 
+        // 已领取 或 当前可领取 都显示已领取背景
         if (bgClaimed != null)
-            bgClaimed.SetActive(isClaimed);
+            bgClaimed.SetActive(isClaimed || isCurrent);
 
         if (bgUnclaimed != null)
-            bgUnclaimed.SetActive(!isClaimed);
+            bgUnclaimed.SetActive(!isClaimed && !isCurrent);
 
         // 光效只在当前可领取且未领取时显示
         if (bgLight != null)
