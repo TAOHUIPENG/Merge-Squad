@@ -1,7 +1,6 @@
 using D2D.Core;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static D2D.Utilities.CommonGameplayFacade;
 
@@ -34,9 +33,7 @@ public class PauseUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // 暂停游戏
         Time.timeScale = 0f;
-        // 弹窗弹出动画
         PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
     }
 
@@ -46,16 +43,14 @@ public class PauseUI : MonoBehaviour
     {
         ResumeTime();
         gameObject.SetActive(false);
-        // 直接重新加载场景（不经过 SceneLoader 的过渡/loading 界面）
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // 不重新加载场景，通过 LevelRestarter 原地重置关卡
+        LevelRestarter.Instance?.Restart();
     }
 
     private void OnContinue()
     {
         ResumeTime();
         gameObject.SetActive(false);
-        // 游戏已在 RunningState，仅恢复 timeScale 即可继续
-        // _stateMachine.Push(new RunningState()) 在已是 RunningState 时无效，故省略
         UIGame.Instance?.Show();
     }
 

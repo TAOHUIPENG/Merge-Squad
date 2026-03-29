@@ -94,6 +94,24 @@ public class GameProgress : GameStateMachineUser
     {
         isFinished = true;
     }
+
+    /// <summary>
+    /// 重置关卡进度（不重载场景）。
+    /// 保持 isStarted=true，让 Update 在 RunningState 下直接继续计时。
+    /// </summary>
+    public void ResetProgress()
+    {
+        levelTime      = 0f;
+        levelUpTimer   = 0f;
+        level          = 0;
+        XPforLevelUp   = 0f;
+        totalXP        = 0f;
+        isFinished     = false;
+        isStarted      = true; // 保持运行，不需要重新 Push RunningState
+
+        // 重新随机下次升级间隔
+        timeForLevelUp = levelUpTimeRange.RandomFloat();
+    }
     private void Update()
     {
         if (isStarted && !isFinished)

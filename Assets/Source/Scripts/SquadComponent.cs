@@ -27,6 +27,12 @@ public class SquadComponent : GameStateMachineUser
     private float temporaryFirePowerIncrease;
 
     private float currentSpeed;
+
+    // 记录初始 Formation 位置，Restart 时归位
+    private Vector3 _initialFormationPosition;
+
+    // Awake 时自动保存的初始成员模板（非激活副本），无需 Inspector 赋值
+    private readonly List<GameObject> _memberTemplates = new();
     public SquadMember LastSquadMember => squadMembers[squadMembers.Count - 1];
 
     public Vector3 SpawnPosition => squadMembers.Count > 0 ? squadMembers[squadMembers.Count - 1].transform.position - Vector3.back : _formation.transform.position;
@@ -43,7 +49,19 @@ public class SquadComponent : GameStateMachineUser
         _formation = FindObjectOfType<SquadFormation>().Get<FormationComponent>();
         cinemachineTargetGroup = FindObjectOfType<CinemachineTargetGroup>();
 
+        // 记录初始位置，Restart 时归位
+        _initialFormationPosition = _formation.transform.position;
+
         squadMembers = GetComponentsInChildren<SquadMember>().ToList();
+
+        // 立即把初始成员克隆为非激活模板，作为 Restart 的蓝本（无需 Inspector 赋值）
+        // GetComponentsInChildren 默认只返回激活对象，所以此后加入的非激活模板不会被误拾
+        foreach (var member in squadMembers)
+        {
+            var template = Instantiate(member.gameObject, transform);
+            template.SetActive(false);
+            _memberTemplates.Add(template);
+        }
 
         foreach (var member in squadMembers)
         {
@@ -232,6 +250,59 @@ public class SquadComponent : GameStateMachineUser
         {
             member.animancer.Layers[0].Play(member.animations.Idle);
         }
+    }
+
+    /// <summary>
+    /// 重置小队（不重载场景）：
+    /// 销毁所有当前成员 → Formation 归位 → 从 Awake 时自动保存的模板重新实例化。
+    /// </summary>
+    public void ResetSquad()
+    {
+        // 销毁所有当前成员（包含进化后的高级成员）
+        foreach (var member in squadMembers)
+            if (member != null) Destroy(member.gameObject);
+        squadMembers.Clear();
+
+        // Formation 归回初始位置
+        _formation.transform.position = _initialFormationPosition;
+
+        if (_memberTemplates.Count == 0)
+        {
+            Debug.LogWarning("[SquadComponent] 没有可用的成员模板，无法还原小队。");
+            return;
+        }
+
+        // 从 Awake 时保存的非激活模板实例化新成员
+        foreach (var template in _memberTemplates)
+        {
+            if (template == null) continue;
+
+            var go = Instantiate(template, _initialFormationPosition, Quaternion.identity, transform);
+            go.SetActive(true);
+
+            var m = go.GetComponent<SquadMember>();
+            m.Init();
+            m.animancer.Layers[0].Play(m.animations.Idle);
+
+            var captured = m; // 捕获局部变量，避免 lambda 闭包引用最终值
+            captured.health.Died += () => MemberDie(captured);
+            squadMembers.Add(m);
+        }
+
+        // 重建 Formation
+        int count = squadMembers.Count;
+        _formation.RecreateFormation(Vector3.zero,
+                                     count <= 4 ? _formationRadius - .3f : _formationRadius,
+                                     count - 1);
+        SetMembersToCinemachineGroup();
+        OrderMembers();
+
+        // 重置临时升级数值
+        temporaryFireRateIncrease  = 0f;
+        temporaryFirePowerIncrease = 0f;
+        currentSpeed = _speed;
+        _gameData.SetProjectilePrefab(_gameData.pistolProjectile);
+        _gameData.SetSideProjectiles(0);
     }
     #endregion
 

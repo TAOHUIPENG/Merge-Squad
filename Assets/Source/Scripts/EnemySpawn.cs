@@ -108,8 +108,27 @@ public class EnemySpawn : Unit
     public void SetWave(Wave wave)
     {
         currentWave = wave;
-
         Debug.Log(wave.name);
+    }
+
+    /// <summary>
+    /// 销毁所有场上敌人，重置生成器状态（不重载场景）。
+    /// </summary>
+    public void ResetSpawner()
+    {
+        // 清除所有场上的敌人
+        foreach (var enemy in FindObjectsOfType<EnemyComponent>())
+            Destroy(enemy.gameObject);
+
+        // 重置计数与计时
+        currentAmount    = 0;
+        currentWaveTimer = 0f;
+        currentLevelTimer = 0f;
+        timer            = 0f;
+        isStopped        = false;
+
+        // 回到第一波
+        SetWave(_gameData.firstWave);
     }
     public void EnemyDied()
     {
