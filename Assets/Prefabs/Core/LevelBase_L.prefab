@@ -45137,6 +45137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoseWindow_1
       objectReference: {fileID: 0}
+    - target: {fileID: 4598870618061457585, guid: 0705f059ec871de4a9afcf214c8393bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6194035570966728531, guid: 0705f059ec871de4a9afcf214c8393bf, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
