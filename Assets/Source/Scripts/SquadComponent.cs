@@ -253,6 +253,53 @@ public class SquadComponent : GameStateMachineUser
     }
 
     /// <summary>
+    /// 复活专用：清空死亡成员 → Formation 归位 → 从模板重新实例化 → 连接死亡回调。
+    /// 不重置临时升级数值，保留玩家本局内的强化。
+    /// </summary>
+    public void ReviveSquad()
+    {
+        // 销毁所有仍在场景中的活跃成员（包含正在执行 GrayFadeoutDeath 的对象）
+        // GetComponentsInChildren 默认 includeInactive=false，不会误删非激活的模板
+        foreach (var member in GetComponentsInChildren<SquadMember>())
+            if (member != null) Destroy(member.gameObject);
+        squadMembers.Clear();
+
+        // Formation 归回初始位置
+        _formation.transform.position = _initialFormationPosition;
+
+        if (_memberTemplates.Count == 0)
+        {
+            Debug.LogWarning("[SquadComponent] 没有可用的成员模板，无法复活小队。");
+            return;
+        }
+
+        // 从 Awake 时保存的非激活模板实例化新成员
+        foreach (var template in _memberTemplates)
+        {
+            if (template == null) continue;
+
+            var go = Instantiate(template, _initialFormationPosition, Quaternion.identity, transform);
+            go.SetActive(true);
+
+            var m = go.GetComponent<SquadMember>();
+            m.Init();
+            m.animancer.Layers[0].Play(m.animations.Idle);
+
+            var captured = m;
+            captured.health.Died += () => MemberDie(captured);
+            squadMembers.Add(m);
+        }
+
+        // 重建 Formation
+        int count = squadMembers.Count;
+        _formation.RecreateFormation(Vector3.zero,
+                                     count <= 4 ? _formationRadius - .3f : _formationRadius,
+                                     count - 1);
+        SetMembersToCinemachineGroup();
+        OrderMembers();
+    }
+
+    /// <summary>
     /// 重置小队（不重载场景）：
     /// 销毁所有当前成员 → Formation 归位 → 从 Awake 时自动保存的模板重新实例化。
     /// </summary>

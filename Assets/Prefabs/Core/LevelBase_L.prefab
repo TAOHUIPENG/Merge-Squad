@@ -47811,7 +47811,7 @@ MonoBehaviour:
   continueButton: {fileID: 7501255443813521989}
   closeButton: {fileID: 3463540187117686376}
   panelRoot: {fileID: 0}
-  staminaPopupUI: {fileID: 0}
+  staminaPopupUI: {fileID: 164912669829210074}
 --- !u!114 &3214807644528430009 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8516449564637326469, guid: 09ac449fb8ad4024f94d342cc289190f, type: 3}

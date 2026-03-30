@@ -82,8 +82,8 @@ public class FailUI : MonoBehaviour
         // 1. 清空场上所有敌人（减轻复活压力），但保留关卡计时
         _enemySpawn?.ReviveSpawner();
 
-        // 2. 小队全员血量回满
-        _squad?.FullHealSquad();
+        // 2. 重新实例化小队（成员在死亡时已从列表移除，FullHealSquad 无法作用于空列表）
+        _squad?.ReviveSquad();
 
         // 3. 恢复 GameProgress 计时（isFinished → false）
         _gameProgress?.Revive();
@@ -96,6 +96,8 @@ public class FailUI : MonoBehaviour
 
         // 6. 恢复游戏 HUD
         UIGame.Instance?.Show();
+        
+        LevelRestarter.Instance.player.gameObject.SetActive(true);
     }
 
     private void OnDoubleReward()

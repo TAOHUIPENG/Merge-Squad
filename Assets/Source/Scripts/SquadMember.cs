@@ -58,12 +58,16 @@ public class SquadMember : Unit
 
         if (canvas == null)
         {
-            canvas = GetComponentInChildren<CharacterCanvas>();
+            // includeInactive=true: 模板克隆时 CharacterCanvas 可能被 OnGameFinish 停用
+            canvas = GetComponentInChildren<CharacterCanvas>(true);
+            if (canvas != null)
+                canvas.gameObject.SetActive(true); // 确保 UI 可见
         }
 
         targetVector = transform.forward * 10f + transform.up;
 
-        canvas.HealthBar.SetHealth(health);
+        if (canvas != null && canvas.HealthBar != null)
+            canvas.HealthBar.SetHealth(health);
     }
     private void Update()
     {
@@ -108,12 +112,15 @@ public class SquadMember : Unit
 
         if (canvas == null)
         {
-            canvas = GetComponentInChildren<CharacterCanvas>();
+            canvas = GetComponentInChildren<CharacterCanvas>(true);
+            if (canvas != null)
+                canvas.gameObject.SetActive(true);
         }
 
         animancer.Play(animations.Idle);
 
-        canvas.EvolutionText.text = $"{Mathf.Pow(2, EvolveLevel + 1)}";
+        if (canvas != null && canvas.EvolutionText != null)
+            canvas.EvolutionText.text = $"{Mathf.Pow(2, EvolveLevel + 1)}";
     }
     public virtual void Shoot(Transform target)
     {

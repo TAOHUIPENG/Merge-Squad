@@ -9,6 +9,7 @@ using static D2D.Utilities.CommonGameplayFacade;
 /// </summary>
 public class LevelRestarter : MonoBehaviour
 {
+    public GameObject player;
     public static LevelRestarter Instance { get; private set; }
 
     private void Awake()
