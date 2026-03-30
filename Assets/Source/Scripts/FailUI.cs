@@ -1,4 +1,5 @@
 using D2D.Core;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using static D2D.Utilities.CommonGameplayFacade;
@@ -58,6 +59,14 @@ public class FailUI : MonoBehaviour
 
     private void OnEnable()
     {
+        // GameFinishWindowsSwitcher 会通过 _loseWindow.On(after: delay) 延迟激活本界面。
+        // 若复活已完成（状态已切回 RunningState），立即关闭自身，防止延迟回调重新弹出失败界面。
+        if (_stateMachine != null && !_stateMachine.Last.Is<LoseState>())
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         PopupAnimation.PlayOpen(panelRoot != null ? panelRoot : transform);
     }
 
@@ -72,6 +81,11 @@ public class FailUI : MonoBehaviour
     private void OnReviveAd()
     {
         Debug.Log("FailUI: 看广告复活 - 请接入广告SDK");
+
+        // 立即禁用按钮，防止动画期间重复点击
+        if (reviveAdButton != null)
+            reviveAdButton.interactable = false;
+
         // TODO: 广告SDK完成回调后调用 OnReviveAdComplete()
         // 模拟广告完成：
         OnReviveAdComplete();
@@ -88,7 +102,8 @@ public class FailUI : MonoBehaviour
         // 3. 恢复 GameProgress 计时（isFinished → false）
         _gameProgress?.Revive();
 
-        // 4. 关闭失败界面
+        // 4. 杀掉弹窗动画 Tween，再关闭界面（防止 Tween 在 inactive 状态继续运行）
+        (panelRoot != null ? panelRoot : transform).DOKill();
         gameObject.SetActive(false);
 
         // 5. 重新推入 RunningState（LoseState → RunningState 合法）
@@ -96,8 +111,12 @@ public class FailUI : MonoBehaviour
 
         // 6. 恢复游戏 HUD
         UIGame.Instance?.Show();
-        
+
         LevelRestarter.Instance.player.gameObject.SetActive(true);
+
+        // 7. 恢复按钮可交互状态（下次失败时可再次使用）
+        if (reviveAdButton != null)
+            reviveAdButton.interactable = true;
     }
 
     private void OnDoubleReward()
