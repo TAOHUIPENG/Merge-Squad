@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Double Skill
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 6c56a78d4a6fc94408b86d57a5f9c52b, type: 3}
-  upgradeText: Double All
+  upgradeText: "\u5168\u90E8\u52A0\u500D"

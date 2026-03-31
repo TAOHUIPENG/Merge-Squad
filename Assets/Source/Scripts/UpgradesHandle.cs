@@ -26,10 +26,10 @@ public class UpgradesHandle : Unit
     [SerializeField] private StatsUpgrades[] statsUpgrades;
 
     [Header("广告升级")]
-    [Tooltip("3个按钮中哪一个需要看广告才能获得升级（0~2），设为 -1 则全部不需要")]
-    [SerializeField] private int adButtonIndex = 0;
+    [Tooltip("指定哪个升级项需要看广告才能获得，留空则全部不需要（将 Double Skill asset 拖入此处）")]
+    [SerializeField] private Upgrades adGatedUpgrade;
 
-    [Header("Debug Upgrades")]
+    [Header("调试升级")]
     [SerializeField] private bool isDebug = false;
     [SerializeField, ShowIf("isDebug")] private MemberUpgrades[] debugUpgrades;
 
@@ -125,7 +125,7 @@ public class UpgradesHandle : Unit
 
             _currentUpgrades.Add(upgrade);
 
-            bool isAdGated = adButtonIndex >= 0 && index == adButtonIndex;
+            bool isAdGated = adGatedUpgrade != null && upgrade == adGatedUpgrade;
             buttons[index].SetAdGated(isAdGated);
 
             if (isAdGated)

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UpgradeButtonUI : MonoBehaviour
 {
     [SerializeField] private Image upgradeIcon;
-    [SerializeField] private TextMeshProUGUI upgradeText;
+    [SerializeField] private Text upgradeText;
     [SerializeField] private Button upgradeButton;
 
     [Header("广告角标（可选）")]
