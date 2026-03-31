@@ -60,7 +60,7 @@ namespace D2D
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void OnApplicationStart()
         {
-            var a = FindObjectOfType<Analytics>();
+            /*var a = FindObjectOfType<Analytics>();
             a._level = FindObjectOfType<Level>();
             timeSinceAppStart = Time.time;
             
@@ -74,7 +74,7 @@ namespace D2D
                 
             a.OnAppOpen();
 
-            Debug.Log("Analytics initialized! This is a first app open.");
+            Debug.Log("Analytics initialized! This is a first app open.");*/
         }
 
         private void Start()
