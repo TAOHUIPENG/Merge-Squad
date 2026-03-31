@@ -39,7 +39,10 @@ public class LevelRestarter : MonoBehaviour
         // 2. 销毁当前小队成员，从预制体重新生成
         _squad?.ResetSquad();
 
-        // 3. 重置关卡计时、等级、XP 等进度数据
+        // 3. 清除场景中残留的 x2 广告按钮
+        EnemyDoubleRewardUI.ClearAll();
+
+        // 4. 重置关卡计时、等级、XP 等进度数据
         _gameProgress?.ResetProgress();
 
         // 4. 确保游戏 HUD 可见（若之前被 FailUI/WinUI 隐藏过）

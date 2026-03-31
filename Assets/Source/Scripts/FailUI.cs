@@ -101,7 +101,10 @@ public class FailUI : MonoBehaviour
         // 2. 重新实例化小队（成员在死亡时已从列表移除，FullHealSquad 无法作用于空列表）
         _squad?.ReviveSquad();
 
-        // 3. 恢复 GameProgress 计时（isFinished → false）
+        // 3. 清除场景中残留的 x2 广告按钮
+        EnemyDoubleRewardUI.ClearAll();
+
+        // 4. 恢复 GameProgress 计时（isFinished → false）
         _gameProgress?.Revive();
 
         // 4. 杀掉弹窗动画 Tween，再关闭界面（防止 Tween 在 inactive 状态继续运行）

@@ -26,6 +26,12 @@ public class EnemyComponent : Unit, IHittable
     [Header("After Death")]
     [SerializeField] internal GameObject powerUpPrefab;
 
+    [Header("双倍奖励广告")]
+    [Tooltip("死亡后头顶出现 x2 广告按钮的概率（0~100）")]
+    [SerializeField] internal float doubleRewardChance = 30f;
+    [Tooltip("x2 广告按钮的 World Space 预制体")]
+    [SerializeField] internal GameObject doubleRewardUIPrefab;
+
     internal float attackTimer;
 
     internal NavMeshAgent navMesh;
@@ -118,6 +124,14 @@ public class EnemyComponent : Unit, IHittable
         _enemySpawn.EnemyDied();
 
         _db.Money.Value += deathReward;
+
+        // 概率生成头顶 x2 广告按钮
+        if (doubleRewardUIPrefab != null && Random.Range(0f, 100f) < doubleRewardChance)
+        {
+            Instantiate(doubleRewardUIPrefab)
+                .GetComponent<EnemyDoubleRewardUI>()
+                .Init(deathReward, transform.position);
+        }
 
         isDead = true;
 

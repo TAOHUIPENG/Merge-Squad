@@ -241,6 +241,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2512949562409372157, guid: f756f299ed85c28449c0a3eafd642a32, type: 3}
     - target: {fileID: 4237591272215210810, guid: a83601dfcee9a0a4bb6bb284cf6cb348, type: 3}
+      propertyPath: doubleRewardChance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237591272215210810, guid: a83601dfcee9a0a4bb6bb284cf6cb348, type: 3}
+      propertyPath: doubleRewardUIPrefab
+      value: 
+      objectReference: {fileID: 7783782444269049702, guid: d7cca61c91e3b014e8b2b6a7c9cda676, type: 3}
+    - target: {fileID: 4237591272215210810, guid: a83601dfcee9a0a4bb6bb284cf6cb348, type: 3}
       propertyPath: triggerEnterComponent
       value: 
       objectReference: {fileID: 4943830718716313883}

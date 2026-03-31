@@ -88,6 +88,8 @@ MonoBehaviour:
   damage: 1
   overlap: {fileID: 2352966398504714414}
   powerUpPrefab: {fileID: 2512949562409372157, guid: 10b73102836b29747af83bf1026b2685, type: 3}
+  doubleRewardChance: 10
+  doubleRewardUIPrefab: {fileID: 7783782444269049702, guid: d7cca61c91e3b014e8b2b6a7c9cda676, type: 3}
 --- !u!114 &4237591272215210791
 MonoBehaviour:
   m_ObjectHideFlags: 0
