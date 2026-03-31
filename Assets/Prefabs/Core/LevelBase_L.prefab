@@ -42342,6 +42342,7 @@ MonoBehaviour:
   addGiftButton: {fileID: 0}
   shareButton: {fileID: 0}
   addStaminaButton: {fileID: 0}
+  addCoinButton: {fileID: 0}
   staminaText: {fileID: 0}
   coinText: {fileID: 0}
   userAvatar: {fileID: 0}
@@ -42349,6 +42350,7 @@ MonoBehaviour:
   signInUI: {fileID: 0}
   shareUI: {fileID: 0}
   staminaPopupUI: {fileID: 0}
+  coinPopupUI: {fileID: 0}
 --- !u!114 &1576837838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45691,6 +45693,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 234763905491813538}
     - target: {fileID: 6604793564237138099, guid: 724f6e159ecfe4949bcb593520f99990, type: 3}
+      propertyPath: coinPopupUI
+      value: 
+      objectReference: {fileID: 9038242284113490847}
+    - target: {fileID: 6604793564237138099, guid: 724f6e159ecfe4949bcb593520f99990, type: 3}
       propertyPath: staminaPopupUI
       value: 
       objectReference: {fileID: 164912669829210074}
@@ -48465,6 +48471,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoneyUI
       objectReference: {fileID: 0}
+    - target: {fileID: 752072134881884211, guid: 34dffa6f68f17624298e44d85a3008e8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4535475453190708755, guid: 34dffa6f68f17624298e44d85a3008e8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -48557,6 +48567,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4535475453190708755, guid: 34dffa6f68f17624298e44d85a3008e8, type: 3}
   m_PrefabInstance: {fileID: 8331683104783692913}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9038242284113490847 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1066892263906248686, guid: 34dffa6f68f17624298e44d85a3008e8, type: 3}
+  m_PrefabInstance: {fileID: 8331683104783692913}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb6842e7cb346f3bedbad383029fe78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9191337741698456667
 PrefabInstance:
   m_ObjectHideFlags: 0

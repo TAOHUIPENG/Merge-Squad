@@ -30,6 +30,7 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button addGiftButton;          // 添加有礼
     [SerializeField] private Button shareButton;            // 分享
     [SerializeField] private Button addStaminaButton;       // 加体力
+    [SerializeField] private Button addCoinButton;       // 加金币
 
     // ---- 显示信息 ----
     [Header("信息显示")]
@@ -43,6 +44,7 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private SignInUI signInUI;
     [SerializeField] private ShareUI shareUI;
     [SerializeField] private StaminaPopupUI staminaPopupUI;
+    [SerializeField] private CoinPopupUI coinPopupUI;
 
 
     private void Start()
@@ -70,15 +72,10 @@ public class MenuUI : MonoBehaviour
 
         if (addStaminaButton != null)
             addStaminaButton.onClick.AddListener(OnAddStaminaClicked);
+        
+        addCoinButton?.onClick.AddListener(OnFreeCoinClicked);
 
-        freeCoinButton.Button.onClick.AddListener(() =>
-        {
-            AdManager.Instance.ShowRewarded(() =>
-            {
-                _db.Money.Value += CalcFreeCoinReward();
-                RefreshDisplay();
-            });
-        });
+        freeCoinButton.Button.onClick.AddListener(OnFreeCoinClicked);
         
         UpdateStats();
         RefreshDisplay();
@@ -154,6 +151,17 @@ public class MenuUI : MonoBehaviour
         else
             Debug.LogWarning("MenuUI: staminaPopupUI 未绑定");
     }
+
+    private void OnFreeCoinClicked()
+    {
+        if (coinPopupUI != null)
+            ShowPanel(coinPopupUI.gameObject);
+        else
+            Debug.LogWarning("MenuUI: coinPopupUI 未绑定");
+    }
+
+    /// <summary>由 CoinPopupUI 等外部调用，同步刷新金币显示</summary>
+    public void OnCoinChanged() => RefreshDisplay();
 
     /// <summary>
     /// 安全地显示一个弹窗面板。
