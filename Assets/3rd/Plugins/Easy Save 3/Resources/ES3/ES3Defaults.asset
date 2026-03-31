@@ -67,6 +67,9 @@ MonoBehaviour:
     - KinoBloom.Runtime
     - MoreMountains.Feedbacks.NiceVibrations
     - UniTask.Addressables
+    - TTWebGL
+    - TTLitJson
+    - com.bytedance.ttsdk.ref
     - MoreMountains.Tools.Editor
     - ToolbarExtender.Editor
     - ToonyColorsPro.Editor
@@ -85,6 +88,7 @@ MonoBehaviour:
     - ToonyColorsPro.Demo.Editor
     - AppsFlyer.Editor
     - RahulCorleone.MagicLayout.Editor
+    - com.bytedance.ttsdk-editor
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
