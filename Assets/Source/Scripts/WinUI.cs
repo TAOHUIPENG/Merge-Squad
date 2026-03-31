@@ -68,8 +68,9 @@ public class WinUI : MonoBehaviour
 
     private void OnDoubleReward()
     {
-        Debug.Log("WinUI: 看广告双倍奖励 - 请接入广告SDK");
-        // TODO: 广告完成后调用 OnDoubleRewardAdComplete()
+        AdManager.Instance.ShowRewarded(
+            onRewarded: OnDoubleRewardAdComplete,
+            onFailed:   err => Debug.LogWarning($"WinUI: 双倍奖励广告失败 - {err}"));
     }
 
     private void OnDoubleRewardAdComplete()

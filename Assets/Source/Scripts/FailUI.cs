@@ -61,7 +61,7 @@ public class FailUI : MonoBehaviour
     {
         // GameFinishWindowsSwitcher 会通过 _loseWindow.On(after: delay) 延迟激活本界面。
         // 若复活已完成（状态已切回 RunningState），立即关闭自身，防止延迟回调重新弹出失败界面。
-        if (_stateMachine != null && !_stateMachine.Last.Is<LoseState>())
+        if (_stateMachine != null && _stateMachine.Last!=null&& !_stateMachine.Last.Is<LoseState>())
         {
             gameObject.SetActive(false);
             return;
@@ -80,15 +80,17 @@ public class FailUI : MonoBehaviour
 
     private void OnReviveAd()
     {
-        Debug.Log("FailUI: 看广告复活 - 请接入广告SDK");
-
-        // 立即禁用按钮，防止动画期间重复点击
         if (reviveAdButton != null)
             reviveAdButton.interactable = false;
 
-        // TODO: 广告SDK完成回调后调用 OnReviveAdComplete()
-        // 模拟广告完成：
-        OnReviveAdComplete();
+        AdManager.Instance.ShowRewarded(
+            onRewarded: OnReviveAdComplete,
+            onClosed:   () => { if (reviveAdButton != null) reviveAdButton.interactable = true; },
+            onFailed:   err =>
+            {
+                Debug.LogWarning($"FailUI: 复活广告失败 - {err}");
+                if (reviveAdButton != null) reviveAdButton.interactable = true;
+            });
     }
 
     private void OnReviveAdComplete()
@@ -121,8 +123,9 @@ public class FailUI : MonoBehaviour
 
     private void OnDoubleReward()
     {
-        Debug.Log("FailUI: 看广告获得2倍奖励 - 请接入广告SDK");
-        // TODO: 广告完成后调用 OnDoubleRewardAdComplete()
+        AdManager.Instance.ShowRewarded(
+            onRewarded: OnDoubleRewardAdComplete,
+            onFailed:   err => Debug.LogWarning($"FailUI: 双倍奖励广告失败 - {err}"));
     }
 
     private void OnDoubleRewardAdComplete()

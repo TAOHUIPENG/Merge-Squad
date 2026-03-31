@@ -55,9 +55,9 @@ public class StaminaPopupUI : MonoBehaviour
 
     private void OnWatchAd()
     {
-        Debug.Log("StaminaPopupUI: 请接入广告SDK后在此处播放广告");
-        // TODO: 广告播放完成后调用 OnAdComplete()
-        OnAdComplete();
+        AdManager.Instance.ShowRewarded(
+            onRewarded: OnAdComplete,
+            onFailed:   err => Debug.LogWarning($"StaminaPopupUI: 激励广告失败 - {err}"));
     }
 
     private void OnAdComplete()

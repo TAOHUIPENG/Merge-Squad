@@ -12,6 +12,14 @@ public class MenuUI : MonoBehaviour
     [Header("升级按钮")]
     [SerializeField] private MenuUIButton1 fireRateIncreaseButton;
     [SerializeField] private MenuUIButton1 firePowerIncreaseButton;
+    [SerializeField] private MenuUIButton1 freeCoinButton;
+    
+    [SerializeField] private GameObject fireRateUpgradeTxt;
+    [SerializeField] private GameObject firePowerUpgradeTxt;
+    [SerializeField] private GameObject fireRateUpgradeAds;
+    [SerializeField] private GameObject firePowerUpgradeAds;
+    
+    
     [SerializeField] private Button continueButton;
 
     // ---- Menu功能按钮 ----
@@ -63,6 +71,15 @@ public class MenuUI : MonoBehaviour
         if (addStaminaButton != null)
             addStaminaButton.onClick.AddListener(OnAddStaminaClicked);
 
+        freeCoinButton.Button.onClick.AddListener(() =>
+        {
+            AdManager.Instance.ShowRewarded(() =>
+            {
+                _db.Money.Value += CalcFreeCoinReward();
+                RefreshDisplay();
+            });
+        });
+        
         UpdateStats();
         RefreshDisplay();
     }
@@ -217,18 +234,49 @@ public class MenuUI : MonoBehaviour
 
     private void IncreasePowerUp()
     {
-        _db.PowerIncreaseLevel.Value++;
-        _db.Money.Value -= _gameData.PowerUpgradePrice;
-        UpdateStats();
-        RefreshDisplay();
+   
+        bool isEnoughForPower = _db.Money.Value >= _gameData.PowerNextUpgradePrice;
+
+        if (isEnoughForPower)
+        {
+            _db.PowerIncreaseLevel.Value++;
+            _db.Money.Value -= _gameData.PowerUpgradePrice;
+            UpdateStats();
+            RefreshDisplay();
+        }
+        else
+        {
+            AdManager.Instance.ShowRewarded(() =>
+            {
+                _db.PowerIncreaseLevel.Value++;
+                UpdateStats();
+                RefreshDisplay();
+            });
+        }
+   
     }
 
     private void IncreaseFireRate()
-    {
-        _db.FireRateDecreaseLevel.Value++;
-        _db.Money.Value -= _gameData.FireUpgradePrice;
-        UpdateStats();
-        RefreshDisplay();
+    {    
+        bool isEnoughForRate = _db.Money.Value >= _gameData.FireNextUpgradePrice;
+
+        if (isEnoughForRate)
+        {
+            _db.FireRateDecreaseLevel.Value++;
+            _db.Money.Value -= _gameData.FireUpgradePrice;
+            UpdateStats();
+            RefreshDisplay();
+        }
+        else
+        {
+            AdManager.Instance.ShowRewarded(() =>
+            {
+                _db.FireRateDecreaseLevel.Value++;
+                UpdateStats();
+                RefreshDisplay();
+            });
+        }
+      
     }
 
     private void CheckForDeactivatingButtons()
@@ -236,18 +284,23 @@ public class MenuUI : MonoBehaviour
         bool isEnoughForRate = _db.Money.Value >= _gameData.FireNextUpgradePrice;
         bool isEnoughForPower = _db.Money.Value >= _gameData.PowerNextUpgradePrice;
 
-        fireRateIncreaseButton.Button.interactable = _gameData.upgradesPercentByLevel.Length <= _db.FireRateDecreaseLevel.Value ? false : isEnoughForRate;
-        firePowerIncreaseButton.Button.interactable = _gameData.upgradesPercentByLevel.Length <= _db.FireRateDecreaseLevel.Value ? false : isEnoughForPower;
+        firePowerUpgradeAds.SetActive(!isEnoughForPower);
+        fireRateUpgradeAds.SetActive(!isEnoughForRate);
+        firePowerUpgradeTxt.SetActive(isEnoughForPower);
+        fireRateUpgradeTxt.SetActive(isEnoughForRate);
+        
+       // fireRateIncreaseButton.Button.interactable = _gameData.upgradesPercentByLevel.Length <= _db.FireRateDecreaseLevel.Value ? false : isEnoughForRate;
+       // firePowerIncreaseButton.Button.interactable = _gameData.upgradesPercentByLevel.Length <= _db.FireRateDecreaseLevel.Value ? false : isEnoughForPower;
 
         if (_db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade)
         {
-            fireRateIncreaseButton.Button.interactable = false;
+           // fireRateIncreaseButton.Button.interactable = false;
             fireRateIncreaseButton.PriceText.text = "MAX";
         }
 
         if (_db.PowerIncreaseLevel.Value >= _gameData.maxLevelUpgrade)
         {
-            firePowerIncreaseButton.Button.interactable = false;
+           // firePowerIncreaseButton.Button.interactable = false;
             firePowerIncreaseButton.PriceText.text = "MAX";
         }
     }
@@ -261,8 +314,18 @@ public class MenuUI : MonoBehaviour
         fireRateIncreaseButton.LevelText.text = $"等级 {_db.FireRateDecreaseLevel.Value}";
         firePowerIncreaseButton.PriceText.text = $"{_gameData.PowerNextUpgradePrice}";
         fireRateIncreaseButton.PriceText.text = $"{_gameData.FireNextUpgradePrice} ";
+        freeCoinButton.PriceText.text = $"+{CalcFreeCoinReward()}";
 
         CheckForDeactivatingButtons();
+    }
+
+    /// <summary>
+    /// 免费金币奖励金额：(射速下次升级价 + 火力下次升级价) × 1.5，向整十取整
+    /// </summary>
+    private int CalcFreeCoinReward()
+    {
+        float raw = (_gameData.FireNextUpgradePrice + _gameData.PowerNextUpgradePrice) * 1.5f;
+        return Mathf.RoundToInt(raw / 10f) * 10;
     }
 }
 
