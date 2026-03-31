@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
+using UnityEngine.UI;
 
 namespace D2D.UI
 {
     public abstract class LabelBase : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _label;
+        [SerializeField] private Text _label;
         [SerializeField] private string _preText;
 
         protected virtual float UpdateRate => -1;

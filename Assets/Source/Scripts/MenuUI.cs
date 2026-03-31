@@ -307,13 +307,13 @@ public class MenuUI : MonoBehaviour
         if (_db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade)
         {
            // fireRateIncreaseButton.Button.interactable = false;
-            fireRateIncreaseButton.PriceText.text = "MAX";
+            fireRateIncreaseButton.PriceText.text = "已满级";
         }
 
         if (_db.PowerIncreaseLevel.Value >= _gameData.maxLevelUpgrade)
         {
            // firePowerIncreaseButton.Button.interactable = false;
-            firePowerIncreaseButton.PriceText.text = "MAX";
+            firePowerIncreaseButton.PriceText.text = "已满级";
         }
     }
 

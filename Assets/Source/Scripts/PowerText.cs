@@ -9,7 +9,7 @@ public class PowerText : MonoBehaviour
 
     private void Awake()
     {
-        textPro = GetComponent<TextMeshProUGUI>();
+       // textPro = GetComponent<TextMeshProUGUI>();
 
         //UpdatePowerText(0);
 
@@ -17,6 +17,6 @@ public class PowerText : MonoBehaviour
     }
     private void UpdatePowerText(int level)
     {
-        textPro.text = $"LVL {level}";
+        textPro.text = $"等级 {level}";
     }
 }
