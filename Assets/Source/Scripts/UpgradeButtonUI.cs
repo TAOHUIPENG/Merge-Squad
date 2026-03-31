@@ -11,6 +11,10 @@ public class UpgradeButtonUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI upgradeText;
     [SerializeField] private Button upgradeButton;
 
+    [Header("广告角标（可选）")]
+    [Tooltip("挂在按钮上的广告图标 GameObject，需要看广告时显示")]
+    [SerializeField] private GameObject adBadge;
+
     public Button UpgradeButton => upgradeButton;
 
     private void OnEnable()
@@ -22,5 +26,14 @@ public class UpgradeButtonUI : MonoBehaviour
     {
         upgradeIcon.sprite = icon;
         upgradeText.text = text;
+    }
+
+    /// <summary>
+    /// 控制广告角标的显示。isAdGated=true 时显示广告图标，点击此按钮需要看广告。
+    /// </summary>
+    public void SetAdGated(bool isAdGated)
+    {
+        if (adBadge != null)
+            adBadge.SetActive(isAdGated);
     }
 }

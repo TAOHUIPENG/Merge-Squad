@@ -6,6 +6,12 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private UpgradeButtonUI[] buttons;
 
+    [Header("全都要按钮")]
+    [Tooltip("点击后看广告，3个升级全部生效")]
+    [SerializeField] private Button getAllButton;
+
+    public Button GetAllButton => getAllButton;
+
     private void Awake()
     {
         HideUI();

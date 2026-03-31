@@ -41237,6 +41237,7 @@ MonoBehaviour:
   - {fileID: 1019118935575558520}
   - {fileID: 6528075783332925797}
   - {fileID: 3403590201739089019}
+  getAllButton: {fileID: 0}
 --- !u!114 &5500339236017155292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44768,6 +44769,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df869ec334d3de4c8ebdf514cfdfd93, type: 2}
   - {fileID: 11400000, guid: 90b35ac5d6fa7e44cb8e116e73287f63, type: 2}
   - {fileID: 11400000, guid: be85b933bfcb7864c810ad9878b20d4e, type: 2}
+  adButtonIndex: 0
   isDebug: 0
   debugUpgrades:
   - {fileID: 11400000, guid: 91d3a7cd9ecbef64288089c2c1b736c4, type: 2}

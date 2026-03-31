@@ -25,6 +25,10 @@ public class UpgradesHandle : Unit
 
     [SerializeField] private StatsUpgrades[] statsUpgrades;
 
+    [Header("广告升级")]
+    [Tooltip("3个按钮中哪一个需要看广告才能获得升级（0~2），设为 -1 则全部不需要")]
+    [SerializeField] private int adButtonIndex = 0;
+
     [Header("Debug Upgrades")]
     [SerializeField] private bool isDebug = false;
     [SerializeField, ShowIf("isDebug")] private MemberUpgrades[] debugUpgrades;
@@ -35,6 +39,9 @@ public class UpgradesHandle : Unit
 
     private List<MemberUpgrades> m_AvailableMemberUpgrades = new();
     private List<MemberUpgrades> m_AllMembers = new();
+
+    // 记录本轮展示的全部升级项，供「全都要」功能使用
+    private readonly List<Upgrades> _currentUpgrades = new();
 
     private void Awake()
     {
@@ -91,12 +98,21 @@ public class UpgradesHandle : Unit
         var buttons = upgradeUI.GetButtons();
         
         GameWithSkills(buttons);
+
+        // 绑定「全都要」按钮：看广告后3项升级全部生效
+        if (upgradeUI.GetAllButton != null)
+        {
+            upgradeUI.GetAllButton.onClick.RemoveAllListeners();
+            upgradeUI.GetAllButton.onClick.AddListener(() =>
+                AdManager.Instance.ShowRewarded(() => UpgradeAll()));
+        }
         
         // GameWithMembers(buttons);
     }
     private void GameWithSkills(UpgradeButtonUI[] buttons)
     {
         List<Upgrades> usedUpgrade = new List<Upgrades>();
+        _currentUpgrades.Clear();
 
         for (int i = 0; i < buttons.Length; i++)
         {
@@ -105,8 +121,23 @@ public class UpgradesHandle : Unit
             buttons[index].UpgradeButton.onClick.RemoveAllListeners();
 
             var upgrade = allUpgrades.Except(usedUpgrade).ToArray().Random();
+            var capturedUpgrade = upgrade;
 
-            buttons[index].UpgradeButton.onClick.AddListener(() => Upgrade(upgrade));
+            _currentUpgrades.Add(upgrade);
+
+            bool isAdGated = adButtonIndex >= 0 && index == adButtonIndex;
+            buttons[index].SetAdGated(isAdGated);
+
+            if (isAdGated)
+            {
+                buttons[index].UpgradeButton.onClick.AddListener(() =>
+                    AdManager.Instance.ShowRewarded(() => Upgrade(capturedUpgrade)));
+            }
+            else
+            {
+                buttons[index].UpgradeButton.onClick.AddListener(() => Upgrade(capturedUpgrade));
+            }
+
             buttons[index].InitButtonUI(upgrade.Icon, upgrade.UpgradeText);
 
             usedUpgrade.Add(upgrade);
@@ -196,6 +227,25 @@ public class UpgradesHandle : Unit
 
     private void Upgrade(Upgrades upgrades)
     {
+        ApplyUpgrade(upgrades);
+        _audioManager.PlayOneShot(_gameData.spawnClip, 0.4f);
+        upgradeUI.HideUI();
+        //_upgradesBlock.UnlockUpgrade(upgrades);
+    }
+
+    /// <summary>看广告后将本轮全部3个升级项一次性生效</summary>
+    private void UpgradeAll()
+    {
+        foreach (var upgrade in _currentUpgrades)
+            ApplyUpgrade(upgrade);
+
+        _audioManager.PlayOneShot(_gameData.spawnClip, 0.4f);
+        upgradeUI.HideUI();
+    }
+
+    /// <summary>执行单条升级的核心逻辑（不包含音效和关闭UI）</summary>
+    private void ApplyUpgrade(Upgrades upgrades)
+    {
         switch (upgrades.GetUpgradeType())
         {
             case UpgradesType.Member:
@@ -215,10 +265,6 @@ public class UpgradesHandle : Unit
 
                 break;
         }
-
-        _audioManager.PlayOneShot(_gameData.spawnClip, 0.4f);
-        upgradeUI.HideUI();
-        //_upgradesBlock.UnlockUpgrade(upgrades);
     }
     private void UpgradeStats(StatsUpgrades upgrade)
     {
