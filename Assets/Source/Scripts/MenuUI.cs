@@ -160,8 +160,12 @@ public class MenuUI : MonoBehaviour
             Debug.LogWarning("MenuUI: coinPopupUI 未绑定");
     }
 
-    /// <summary>由 CoinPopupUI 等外部调用，同步刷新金币显示</summary>
-    public void OnCoinChanged() => RefreshDisplay();
+    /// <summary>由 CoinPopupUI 等外部调用，同步刷新金币显示及按钮状态</summary>
+    public void OnCoinChanged()
+    {
+        UpdateStats();   // 同步升级按钮的广告/金币图标状态
+        RefreshDisplay(); // 同步顶部金币文本
+    }
 
     /// <summary>
     /// 安全地显示一个弹窗面板。
