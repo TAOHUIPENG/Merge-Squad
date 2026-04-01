@@ -258,7 +258,7 @@ public class MenuUI : MonoBehaviour
         }
         else
         {
-            AdManager.Instance.ShowRewarded(() =>
+            AdManager.Instance.ShowRewarded(AdManager.Scenes.IncreasePowerUp, () =>
             {
                 _db.PowerIncreaseLevel.Value++;
                 UpdateStats();
@@ -281,7 +281,7 @@ public class MenuUI : MonoBehaviour
         }
         else
         {
-            AdManager.Instance.ShowRewarded(() =>
+            AdManager.Instance.ShowRewarded(AdManager.Scenes.IncreaseFireRate, () =>
             {
                 _db.FireRateDecreaseLevel.Value++;
                 UpdateStats();

@@ -43,6 +43,7 @@ MonoBehaviour:
     - NaughtyAttributes.Core
     - Cinemachine
     - MoreMountains.Feedbacks.PostProcessing
+    - TTWebGL
     - ToonyColorsPro2.Demo
     - AppsFlyer
     - MoreMountains.Feedbacks.MMTools
@@ -61,21 +62,21 @@ MonoBehaviour:
     - MoreMountains.Tools.Cinemachine
     - ConsoleProDebug
     - MoreMountains.NiceVibrations
+    - TTLitJson
     - UniTask.TextMeshPro
     - MoreMountains.Tools.TextMeshPro
     - Animancer.FSM
     - KinoBloom.Runtime
     - MoreMountains.Feedbacks.NiceVibrations
-    - UniTask.Addressables
-    - TTWebGL
-    - TTLitJson
     - com.bytedance.ttsdk.ref
+    - UniTask.Addressables
     - MoreMountains.Tools.Editor
     - ToolbarExtender.Editor
     - ToonyColorsPro.Editor
     - NaughtyAttributes.Editor
     - Sirenix.OdinInspector.CompatibilityLayer.Editor
     - AV.Inspector
+    - com.bytedance.ttsdk-editor
     - MoreMountains.Feedbacks.Editor
     - StompyRobot.SRF.Editor
     - StompyRobot.SRDebugger.Editor
@@ -88,7 +89,6 @@ MonoBehaviour:
     - ToonyColorsPro.Demo.Editor
     - AppsFlyer.Editor
     - RahulCorleone.MagicLayout.Editor
-    - com.bytedance.ttsdk-editor
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

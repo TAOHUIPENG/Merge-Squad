@@ -29,6 +29,11 @@ public class UpgradesHandle : Unit
     [Tooltip("指定哪个升级项需要看广告才能获得，留空则全部不需要（将 Double Skill asset 拖入此处）")]
     [SerializeField] private Upgrades adGatedUpgrade;
 
+    [Tooltip("「全都要」按钮对应的激励广告位场景名，需与 AdManager Inspector 中配置的 sceneName 一致")]
+    [SerializeField] private string rewardedSceneUpgradeAll = AdManager.Scenes.UpgradeAll;
+    [Tooltip("广告门控升级项对应的激励广告位场景名，需与 AdManager Inspector 中配置的 sceneName 一致")]
+    [SerializeField] private string rewardedSceneAdGated = AdManager.Scenes.UpgradeSkill;
+
     [Header("调试升级")]
     [SerializeField] private bool isDebug = false;
     [SerializeField, ShowIf("isDebug")] private MemberUpgrades[] debugUpgrades;
@@ -104,7 +109,7 @@ public class UpgradesHandle : Unit
         {
             upgradeUI.GetAllButton.onClick.RemoveAllListeners();
             upgradeUI.GetAllButton.onClick.AddListener(() =>
-                AdManager.Instance.ShowRewarded(() => UpgradeAll()));
+                AdManager.Instance.ShowRewarded(rewardedSceneUpgradeAll, () => UpgradeAll()));
         }
         
         // GameWithMembers(buttons);
@@ -131,7 +136,7 @@ public class UpgradesHandle : Unit
             if (isAdGated)
             {
                 buttons[index].UpgradeButton.onClick.AddListener(() =>
-                    AdManager.Instance.ShowRewarded(() => Upgrade(capturedUpgrade)));
+                    AdManager.Instance.ShowRewarded(rewardedSceneAdGated, () => Upgrade(capturedUpgrade)));
             }
             else
             {

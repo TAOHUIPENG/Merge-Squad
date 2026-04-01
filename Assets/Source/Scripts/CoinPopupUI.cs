@@ -60,6 +60,7 @@ public class CoinPopupUI : MonoBehaviour
     private void OnWatchAd()
     {
         AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.CoinPopup,
             onRewarded: OnAdComplete,
             onFailed:   err => Debug.LogWarning($"CoinPopupUI: 激励广告失败 - {err}"));
     }

@@ -426,6 +426,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea8db7d688a42b780e6934a254029c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rewardedAdUnits:
+  - sceneName: EnemyDoubleReward
+    adUnitId: 
+  - sceneName: CoinPopup
+    adUnitId: 
+  - sceneName: Revive
+    adUnitId: 
+  - sceneName: FailDouble
+    adUnitId: 
+  - sceneName: IncreasePowerUp
+    adUnitId: 
+  - sceneName: IncreaseFireRate
+    adUnitId: 
+  - sceneName: StaminaPopup
+    adUnitId: 
+  - sceneName: WinDouble
+    adUnitId: 
+  - sceneName: UpgradeAll
+    adUnitId: 
+  - sceneName: UpgradeSkill
+    adUnitId: 
+  _interstitialAdId: YOUR_INTERSTITIAL_AD_ID
 --- !u!4 &1042131177
 Transform:
   m_ObjectHideFlags: 0

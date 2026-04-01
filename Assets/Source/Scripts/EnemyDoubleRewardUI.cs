@@ -119,6 +119,7 @@ public class EnemyDoubleRewardUI : MonoBehaviour
         adButton.interactable = false;
 
         AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.EnemyDoubleReward,
             onRewarded: () =>
             {
                 _db.Money.Value += _reward;

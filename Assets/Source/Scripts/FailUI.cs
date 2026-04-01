@@ -84,6 +84,7 @@ public class FailUI : MonoBehaviour
             reviveAdButton.interactable = false;
 
         AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.Revive,
             onRewarded: OnReviveAdComplete,
             onClosed:   () => { if (reviveAdButton != null) reviveAdButton.interactable = true; },
             onFailed:   err =>
@@ -127,6 +128,7 @@ public class FailUI : MonoBehaviour
     private void OnDoubleReward()
     {
         AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.FailDouble,
             onRewarded: OnDoubleRewardAdComplete,
             onFailed:   err => Debug.LogWarning($"FailUI: 双倍奖励广告失败 - {err}"));
     }

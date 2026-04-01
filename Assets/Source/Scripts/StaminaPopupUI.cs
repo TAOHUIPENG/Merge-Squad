@@ -56,6 +56,7 @@ public class StaminaPopupUI : MonoBehaviour
     private void OnWatchAd()
     {
         AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.StaminaPopup,
             onRewarded: OnAdComplete,
             onFailed:   err => Debug.LogWarning($"StaminaPopupUI: 激励广告失败 - {err}"));
     }

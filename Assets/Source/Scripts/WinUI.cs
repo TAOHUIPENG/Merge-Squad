@@ -69,6 +69,7 @@ public class WinUI : MonoBehaviour
     private void OnDoubleReward()
     {
         AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.WinDouble,
             onRewarded: OnDoubleRewardAdComplete,
             onFailed:   err => Debug.LogWarning($"WinUI: 双倍奖励广告失败 - {err}"));
     }
