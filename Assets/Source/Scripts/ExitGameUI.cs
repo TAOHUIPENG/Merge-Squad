@@ -11,6 +11,7 @@ public class ExitGameUI : MonoBehaviour
     [Header("按钮")]
     [SerializeField] private Button cancelButton;
     [SerializeField] private Button confirmButton;
+    [SerializeField] private Button closeButton;
 
     [Header("动画")]
     [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
@@ -27,6 +28,9 @@ public class ExitGameUI : MonoBehaviour
 
         if (confirmButton != null)
             confirmButton.onClick.AddListener(OnConfirm);
+        
+        if (closeButton != null)
+            closeButton.onClick.AddListener(OnClose);
     }
 
     private void OnEnable()
@@ -57,4 +61,13 @@ public class ExitGameUI : MonoBehaviour
 
         SceneManager.LoadScene(target);
     }
+    
+    private void OnClose()
+    {
+        ResumeTime();
+        gameObject.SetActive(false);
+        UIGame.Instance?.Show();
+    }
+    
+    private static void ResumeTime() => Time.timeScale = 1f;
 }
