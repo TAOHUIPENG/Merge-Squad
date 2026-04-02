@@ -1,0 +1,23 @@
+{
+    "appid": "tt1efa684781f751da07",
+    "projectname": "Merge Squad 2048",
+    "unity": {
+        "build": {
+            "webgl": "E:\\WB\\Merge Squad 2048\\Merge Squad 2048\\Merge Squad 2048\\Merge-Squad\\Build\\webgl_package-20260401_120556.zip",
+            "native": {
+                "il2cpp": "",
+                "apk": "",
+                "fullApk": ""
+            },
+            "instantGame": ""
+        },
+        "publishType": "AndroidNativeOnly",
+        "starkSdkVersion": "Without StarkSDK",
+        "unityToolsVersion": null,
+        "unityEngineVersion": "2021.3.44f1c1",
+        "arch": "both"
+    },
+    "setting": {
+        "urlCheck": true
+    }
+}
