@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 广告管理器（单例）
@@ -63,6 +64,49 @@ public class AdManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        TTSDK.TT.InitSDK((code,evn) =>
+        {
+            if (code == 0)
+            {
+                Debug.Log("[AdManager] TTSDK 初始化成功");
+                Init();
+            }
+            else
+            {
+                Debug.LogWarning($"[AdManager] TTSDK 初始化失败 errCode={code}, event={evn}");
+            }
+        });
+        
+        // 启动时自动预加载所有广告位，无需外部调用 Init()
+       // Init();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// 场景切换后抖音 SDK 会销毁旧的广告实例（errCode 2005），需要重新创建。
+    /// </summary>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 只有已经完成过初始化（有广告实例）才需要重建；首次初始化由 TTSDK.InitSDK 回调触发
+        if (_rewardedAdMap.Count > 0)
+        {
+            Debug.Log($"[AdManager] 场景切换到 [{scene.name}]，重新加载所有激励广告位");
+            // 清空旧的（已被 SDK 销毁的）实例，再重新创建
+            _rewardedAdMap.Clear();
+            Init();
+        }
+    }
+
+    private void Start()
+    {
+        
     }
 
     // ── 内部状态 ─────────────────────────────────────────────────────────────

@@ -3,7 +3,7 @@
     "projectname": "Merge Squad 2048",
     "unity": {
         "build": {
-            "webgl": "E:\\WB\\Merge Squad 2048\\Merge Squad 2048\\Merge Squad 2048\\Merge-Squad\\Build\\webgl_package-20260402_140329.zip",
+            "webgl": "E:\\WB\\Merge Squad 2048\\Merge Squad 2048\\Merge Squad 2048\\Merge-Squad\\Build\\webgl_package-20260404_181538.zip",
             "native": {
                 "il2cpp": "",
                 "apk": "",
