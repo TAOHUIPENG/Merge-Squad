@@ -261,7 +261,8 @@ public class MenuUI : MonoBehaviour
 
     private void IncreasePowerUp()
     {
-   
+        if (_db.PowerIncreaseLevel.Value >= _gameData.maxLevelUpgrade) return;
+
         bool isEnoughForPower = _db.Money.Value >= _gameData.PowerNextUpgradePrice;
 
         if (isEnoughForPower)
@@ -285,7 +286,9 @@ public class MenuUI : MonoBehaviour
     }
 
     private void IncreaseFireRate()
-    {    
+    {
+        if (_db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade) return;
+
         bool isEnoughForRate = _db.Money.Value >= _gameData.FireNextUpgradePrice;
 
         if (isEnoughForRate)
@@ -310,28 +313,23 @@ public class MenuUI : MonoBehaviour
 
     private void CheckForDeactivatingButtons()
     {
-        bool isEnoughForRate = _db.Money.Value >= _gameData.FireNextUpgradePrice;
+        bool isEnoughForRate  = _db.Money.Value >= _gameData.FireNextUpgradePrice;
         bool isEnoughForPower = _db.Money.Value >= _gameData.PowerNextUpgradePrice;
 
-        firePowerUpgradeAds.SetActive(!isEnoughForPower);
-        fireRateUpgradeAds.SetActive(!isEnoughForRate);
-        firePowerUpgradeTxt.SetActive(isEnoughForPower);
-        fireRateUpgradeTxt.SetActive(isEnoughForRate);
-        
-       // fireRateIncreaseButton.Button.interactable = _gameData.upgradesPercentByLevel.Length <= _db.FireRateDecreaseLevel.Value ? false : isEnoughForRate;
-       // firePowerIncreaseButton.Button.interactable = _gameData.upgradesPercentByLevel.Length <= _db.FireRateDecreaseLevel.Value ? false : isEnoughForPower;
+        bool isRateMaxLevel  = _db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade;
+        bool isPowerMaxLevel = _db.PowerIncreaseLevel.Value    >= _gameData.maxLevelUpgrade;
 
-        if (_db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade)
-        {
-           // fireRateIncreaseButton.Button.interactable = false;
+        // 满级时广告图标和升级价格均隐藏
+        fireRateUpgradeAds.SetActive(!isEnoughForRate  && !isRateMaxLevel);
+        firePowerUpgradeAds.SetActive(!isEnoughForPower && !isPowerMaxLevel);
+        fireRateUpgradeTxt.SetActive(isEnoughForRate   && !isRateMaxLevel);
+        firePowerUpgradeTxt.SetActive(isEnoughForPower  && !isPowerMaxLevel);
+
+        if (isRateMaxLevel)
             fireRateIncreaseButton.PriceText.text = "已满级";
-        }
 
-        if (_db.PowerIncreaseLevel.Value >= _gameData.maxLevelUpgrade)
-        {
-           // firePowerIncreaseButton.Button.interactable = false;
+        if (isPowerMaxLevel)
             firePowerIncreaseButton.PriceText.text = "已满级";
-        }
     }
 
     private void UpdateStats()
