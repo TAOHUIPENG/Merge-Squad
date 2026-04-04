@@ -428,25 +428,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rewardedAdUnits:
   - sceneName: EnemyDoubleReward
-    adUnitId: 
+    adUnitId: 1usoeofid6s1c479h5
   - sceneName: CoinPopup
-    adUnitId: 
+    adUnitId: 1l5727mjf5f094ek4a
   - sceneName: Revive
-    adUnitId: 
+    adUnitId: c5060csbmqc17eifac
   - sceneName: FailDouble
-    adUnitId: 
+    adUnitId: aih2d3he56gi1ki4ob
   - sceneName: IncreasePowerUp
-    adUnitId: 
+    adUnitId: 7nipoek2583259368j
   - sceneName: IncreaseFireRate
-    adUnitId: 
+    adUnitId: 7nipoek2583259368j
   - sceneName: StaminaPopup
-    adUnitId: 
+    adUnitId: 1ihea1gji64ca5c5c2
   - sceneName: WinDouble
-    adUnitId: 
+    adUnitId: aih2d3he56gi1ki4ob
   - sceneName: UpgradeAll
-    adUnitId: 
+    adUnitId: 5fddfh9h7mgg1df068
   - sceneName: UpgradeSkill
-    adUnitId: 
+    adUnitId: 7nipoek2583259368j
   _interstitialAdId: YOUR_INTERSTITIAL_AD_ID
 --- !u!4 &1042131177
 Transform:
