@@ -2,6 +2,7 @@ using D2D.Core;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using static D2D.Utilities.CommonGameplayFacade;
 
 /// <summary>
@@ -15,6 +16,11 @@ public class FailUI : MonoBehaviour
     [Header("按钮")]
     [SerializeField] private Button reviveAdButton;
     [SerializeField] private Button doubleRewardButton;
+    [SerializeField] private Button homeButton;
+
+    [Header("场景")]
+    [Tooltip("点击 Home 后加载的场景名，留空则重新加载当前场景")]
+    [SerializeField] private string menuSceneName = "";
 
     [Header("文本")]
     [SerializeField] private Text currentCoinsText;
@@ -38,6 +44,9 @@ public class FailUI : MonoBehaviour
 
         if (doubleRewardButton != null)
             doubleRewardButton.onClick.AddListener(OnDoubleReward);
+
+        if (homeButton != null)
+            homeButton.onClick.AddListener(OnGoHome);
 
         gameObject.SetActive(false);
     }
@@ -75,7 +84,7 @@ public class FailUI : MonoBehaviour
     private void RefreshUI()
     {
         if (currentCoinsText != null)
-            currentCoinsText.text = $"获得金币: {earnedCoins:0}";
+            currentCoinsText.text = $"+{earnedCoins:0}";
     }
 
     private void OnReviveAd()
@@ -139,5 +148,16 @@ public class FailUI : MonoBehaviour
             _db.Money.Value += earnedCoins;
 
         gameObject.SetActive(false);
+    }
+
+    private void OnGoHome()
+    {
+        _db.Money.Value += earnedCoins;
+        
+        Time.timeScale = 1f;
+        string target = string.IsNullOrEmpty(menuSceneName)
+            ? SceneManager.GetActiveScene().name
+            : menuSceneName;
+        SceneManager.LoadScene(target);
     }
 }

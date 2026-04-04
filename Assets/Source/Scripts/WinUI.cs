@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using static D2D.Utilities.CommonGameplayFacade;
 
 /// <summary>
@@ -15,6 +16,11 @@ public class WinUI : MonoBehaviour
 
     [Header("按钮")]
     [SerializeField] private Button doubleRewardButton;
+    [SerializeField] private Button homeButton;
+
+    [Header("场景")]
+    [Tooltip("点击 Home 后加载的场景名，留空则重新加载当前场景")]
+    [SerializeField] private string menuSceneName = "";
 
     [Header("动画")]
     [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
@@ -32,6 +38,9 @@ public class WinUI : MonoBehaviour
     {
         if (doubleRewardButton != null)
             doubleRewardButton.onClick.AddListener(OnDoubleReward);
+
+        if (homeButton != null)
+            homeButton.onClick.AddListener(OnGoHome);
 
         gameObject.SetActive(false);
     }
@@ -63,7 +72,7 @@ public class WinUI : MonoBehaviour
     private void RefreshUI()
     {
         if (rewardText != null)
-            rewardText.text = $"获得奖励: {earnedReward:0} 金币";
+            rewardText.text = $"+{earnedReward:0}";
     }
 
     private void OnDoubleReward()
@@ -80,5 +89,16 @@ public class WinUI : MonoBehaviour
             _db.Money.Value += earnedReward;
 
         gameObject.SetActive(false);
+    }
+
+    private void OnGoHome()
+    {
+        _db.Money.Value += earnedReward;
+        
+        Time.timeScale = 1f;
+        string target = string.IsNullOrEmpty(menuSceneName)
+            ? SceneManager.GetActiveScene().name
+            : menuSceneName;
+        SceneManager.LoadScene(target);
     }
 }
