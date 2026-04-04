@@ -380,7 +380,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &320761391235271315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b5b111c6c847c8a152592ed6a8b423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adButton: {fileID: 7695968034040905349}
   rewardText: {fileID: 1148315055556702540}
-  autoDestroyDelay: 5
   yOffset: 1.8
+  simulateRewardOnAdFail: 0

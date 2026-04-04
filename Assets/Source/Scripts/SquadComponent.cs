@@ -68,6 +68,7 @@ public class SquadComponent : GameStateMachineUser
             member.Init();
             member.animancer.Layers[0].Play(member.animations.Idle);
             member.health.Died += () => MemberDie(member);
+            member.TryShowDoubleRewardUI();
         }
 
         _stateMachine.On<WinState>(SqaudIdle);
@@ -118,6 +119,7 @@ public class SquadComponent : GameStateMachineUser
             var squadMembersCount = squadMembers.Count;
             _formation.RecreateFormation(squadMembers[0].transform.position, squadMembersCount <= 4 ? _formationRadius - .3f : _formationRadius, squadMembersCount - 1);
             member.health.Died += () => MemberDie(member);
+            member.TryShowDoubleRewardUI();
             SetMembersToCinemachineGroup();
             PunchScaleSquad();
         }

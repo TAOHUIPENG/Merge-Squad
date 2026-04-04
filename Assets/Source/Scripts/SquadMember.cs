@@ -33,6 +33,20 @@ public class SquadMember : Unit
 
     [SerializeField] internal Color memberColor;
 
+    [Header("双倍奖励广告")]
+    [Tooltip("上场时头顶出现 x2 广告按钮的概率（0~100）；仅 showDoubleRewardOnSpawn 为 true 时生效")]
+    [SerializeField] internal float doubleRewardChance = 30f;
+    [Tooltip("x2 广告按钮的 World Space 预制体")]
+    [SerializeField] internal GameObject doubleRewardUIPrefab;
+    [Tooltip("勾选后在首次上场（生成到场上）时按概率显示 x2 按钮（仅用于 2 Neutral 等特定预设）")]
+    [SerializeField] internal bool showDoubleRewardOnSpawn = false;
+
+    private EnemyDoubleRewardUI _spawnedDoubleRewardUI;
+    private bool _doubleRewardSpawnAttempted;
+
+    /// <summary>当前是否存在待触发的 x2 广告 UI。</summary>
+    public bool HasPendingDoubleReward => _spawnedDoubleRewardUI != null;
+
     private CharacterCanvas canvas;
     private Camera currentCamera;
 
@@ -157,5 +171,54 @@ public class SquadMember : Unit
     {
         animancer.Play(animations.Idle);
         IsEvolving = false;
+    }
+
+    /// <summary>
+    /// 首次上场（生成到场上）时调用。
+    /// 按概率在头顶生成 x2 广告视觉指示器，仅对 showDoubleRewardOnSpawn=true 的预设生效。
+    /// 内置幂等保护，多次调用只执行一次。
+    /// </summary>
+    public void TryShowDoubleRewardUI()
+    {
+        if (!showDoubleRewardOnSpawn || doubleRewardUIPrefab == null) return;
+        if (_doubleRewardSpawnAttempted) return;
+        _doubleRewardSpawnAttempted = true;
+
+        if (Random.Range(0f, 100f) >= doubleRewardChance) return;
+
+        _spawnedDoubleRewardUI = Instantiate(doubleRewardUIPrefab)
+            .GetComponent<EnemyDoubleRewardUI>();
+        _spawnedDoubleRewardUI.Init(transform, onSelfDestroyed: () =>
+        {
+            // UI 被销毁（超时/Dismiss）时自动清空引用，防止 MissingReferenceException
+            _spawnedDoubleRewardUI = null;
+            health.Died -= DismissDoubleRewardUI;
+        });
+
+        health.Died += DismissDoubleRewardUI;
+    }
+
+    /// <summary>
+    /// 玩家拾取时由 NeutralMember 调用：立即播放广告，命中概率后触发 onRewarded（x2 数量由调用方处理）。
+    /// </summary>
+    public void TriggerDoubleReward(System.Action onRewarded, System.Action<string> onFailed = null)
+    {
+        if (_spawnedDoubleRewardUI == null) return;  // Unity == 检查，已销毁也返回 null
+
+        var ui = _spawnedDoubleRewardUI;
+        _spawnedDoubleRewardUI = null;
+        health.Died -= DismissDoubleRewardUI;
+
+        if (ui != null)  // 双重保险：避免在清空后 ui 仍是已销毁引用
+            ui.TriggerAd(onRewarded, onFailed);
+    }
+
+    /// <summary>成员死亡/离场时由外部或内部调用，关闭未触发的 x2 UI。</summary>
+    public void DismissDoubleRewardUI()
+    {
+        if (_spawnedDoubleRewardUI != null)  // 使用 Unity == 检查，正确识别已销毁对象
+            _spawnedDoubleRewardUI.Dismiss();
+        _spawnedDoubleRewardUI = null;
+        health.Died -= DismissDoubleRewardUI;
     }
 }
