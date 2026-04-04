@@ -25,6 +25,7 @@ public class AdManager : MonoBehaviour
     {
         public const string EnemyDoubleReward = "EnemyDoubleReward";
         public const string CoinPopup         = "CoinPopup";
+        public const string FreeCoin          = "FreeCoin";
         public const string Revive            = "Revive";
         public const string FailDouble        = "FailDouble";
         public const string IncreasePowerUp   = "IncreasePowerUp";
@@ -219,6 +220,14 @@ public class AdManager : MonoBehaviour
     public void ShowRewarded(string sceneName, Action onRewarded, Action onClosed = null, Action<string> onFailed = null)
     {
         Debug.Log($"[AdManager] ShowRewarded scene={sceneName}");
+
+#if UNITY_EDITOR
+        // Editor 模式下直接回调成功，无需真实广告
+        Debug.Log($"[AdManager] Editor 模式：模拟激励广告成功（scene={sceneName}）");
+        onRewarded?.Invoke();
+        onClosed?.Invoke();
+        return;
+#endif
 
         if (!_rewardedAdMap.TryGetValue(sceneName, out var ad) || ad == null)
         {

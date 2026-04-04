@@ -13,6 +13,8 @@ public class WinUI : MonoBehaviour
 
     [Header("文本")]
     [SerializeField] private Text rewardText;
+    [Tooltip("双倍奖励按钮下方文本，显示正常奖励 × 2")]
+    [SerializeField] private Text doubleRewardText;
 
     [Header("按钮")]
     [SerializeField] private Button doubleRewardButton;
@@ -73,6 +75,8 @@ public class WinUI : MonoBehaviour
     {
         if (rewardText != null)
             rewardText.text = $"+{earnedReward:0}";
+        if (doubleRewardText != null)
+            doubleRewardText.text = $"+{earnedReward * 2:0}";
     }
 
     private void OnDoubleReward()
@@ -88,13 +92,17 @@ public class WinUI : MonoBehaviour
         if (_db != null)
             _db.Money.Value += earnedReward;
 
-        gameObject.SetActive(false);
+        GoToMenu();
     }
 
     private void OnGoHome()
     {
         _db.Money.Value += earnedReward;
-        
+        GoToMenu();
+    }
+
+    private void GoToMenu()
+    {
         Time.timeScale = 1f;
         string target = string.IsNullOrEmpty(menuSceneName)
             ? SceneManager.GetActiveScene().name

@@ -24,6 +24,8 @@ public class FailUI : MonoBehaviour
 
     [Header("文本")]
     [SerializeField] private Text currentCoinsText;
+    [Tooltip("双倍奖励按钮下方文本，显示正常奖励 × 2")]
+    [SerializeField] private Text doubleRewardText;
 
     [Header("动画")]
     [Tooltip("弹窗动画作用的面板根节点，留空则使用自身 Transform")]
@@ -85,6 +87,8 @@ public class FailUI : MonoBehaviour
     {
         if (currentCoinsText != null)
             currentCoinsText.text = $"+{earnedCoins:0}";
+        if (doubleRewardText != null)
+            doubleRewardText.text = $"+{earnedCoins * 2:0}";
     }
 
     private void OnReviveAd()
@@ -147,13 +151,17 @@ public class FailUI : MonoBehaviour
         if (_db != null)
             _db.Money.Value += earnedCoins;
 
-        gameObject.SetActive(false);
+        GoToMenu();
     }
 
     private void OnGoHome()
     {
         _db.Money.Value += earnedCoins;
-        
+        GoToMenu();
+    }
+
+    private void GoToMenu()
+    {
         Time.timeScale = 1f;
         string target = string.IsNullOrEmpty(menuSceneName)
             ? SceneManager.GetActiveScene().name

@@ -73,7 +73,7 @@ public class MenuUI : MonoBehaviour
         if (addStaminaButton != null)
             addStaminaButton.onClick.AddListener(OnAddStaminaClicked);
         
-        addCoinButton?.onClick.AddListener(OnFreeCoinClicked);
+        addCoinButton?.onClick.AddListener(OnAddCoinClicked);
 
         freeCoinButton.Button.onClick.AddListener(OnFreeCoinClicked);
         
@@ -153,6 +153,21 @@ public class MenuUI : MonoBehaviour
     }
 
     private void OnFreeCoinClicked()
+    {
+        AdManager.Instance.ShowRewarded(
+            AdManager.Scenes.FreeCoin,
+            onRewarded: () =>
+            {
+                int reward = CalcFreeCoinReward();
+                _db.Money.Value += reward;
+                Debug.Log($"[MenuUI] 免费金币广告看完，金币+{reward}，当前={_db.Money.Value}");
+                UpdateStats();
+                RefreshDisplay();
+            },
+            onFailed: err => Debug.LogWarning($"[MenuUI] 免费金币广告失败: {err}"));
+    }
+
+    private void OnAddCoinClicked()
     {
         if (coinPopupUI != null)
             ShowPanel(coinPopupUI.gameObject);
@@ -260,7 +275,8 @@ public class MenuUI : MonoBehaviour
         {
             AdManager.Instance.ShowRewarded(AdManager.Scenes.IncreasePowerUp, () =>
             {
-                _db.PowerIncreaseLevel.Value++;
+                _db.PowerIncreaseLevel.Value = Mathf.Min(
+                    (int)_db.PowerIncreaseLevel.Value + 2, _gameData.maxLevelUpgrade);
                 UpdateStats();
                 RefreshDisplay();
             });
@@ -283,7 +299,8 @@ public class MenuUI : MonoBehaviour
         {
             AdManager.Instance.ShowRewarded(AdManager.Scenes.IncreaseFireRate, () =>
             {
-                _db.FireRateDecreaseLevel.Value++;
+                _db.FireRateDecreaseLevel.Value = Mathf.Min(
+                    (int)_db.FireRateDecreaseLevel.Value + 2, _gameData.maxLevelUpgrade);
                 UpdateStats();
                 RefreshDisplay();
             });
@@ -319,8 +336,12 @@ public class MenuUI : MonoBehaviour
 
     private void UpdateStats()
     {
-        _db.PowerIncreasePercent.Value = _gameData.upgradesPercentByLevel[(int)_db.PowerIncreaseLevel.Value] / 100;
-        _db.FireRateDecreasePercent.Value = _gameData.upgradesPercentByLevel[(int)_db.FireRateDecreaseLevel.Value] / 100;
+        int maxIdx = _gameData.upgradesPercentByLevel.Length - 1;
+        int powerIdx = Mathf.Clamp((int)_db.PowerIncreaseLevel.Value,    0, maxIdx);
+        int fireIdx  = Mathf.Clamp((int)_db.FireRateDecreaseLevel.Value, 0, maxIdx);
+
+        _db.PowerIncreasePercent.Value    = _gameData.upgradesPercentByLevel[powerIdx] / 100;
+        _db.FireRateDecreasePercent.Value = _gameData.upgradesPercentByLevel[fireIdx]  / 100;
 
         firePowerIncreaseButton.LevelText.text = $"等级 {_db.PowerIncreaseLevel.Value}";
         fireRateIncreaseButton.LevelText.text = $"等级 {_db.FireRateDecreaseLevel.Value}";

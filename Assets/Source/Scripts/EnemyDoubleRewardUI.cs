@@ -16,7 +16,7 @@ public class EnemyDoubleRewardUI : MonoBehaviour
 
     [Header("参数")]
     [Tooltip("高于跟随目标的 Y 偏移")]
-    [SerializeField] private float yOffset = 1.8f;
+    [SerializeField] private float yOffset = 1.2f;
     [Tooltip("开发测试用：广告加载失败时仍发放 x2 奖励（上线前务必关闭）")]
     [SerializeField] private bool simulateRewardOnAdFail = false;
 
