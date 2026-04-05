@@ -45,6 +45,7 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private ShareUI shareUI;
     [SerializeField] private StaminaPopupUI staminaPopupUI;
     [SerializeField] private CoinPopupUI coinPopupUI;
+    [SerializeField] private SidebarUI sidebarUI;
 
 
     private void Start()
@@ -79,6 +80,9 @@ public class MenuUI : MonoBehaviour
         
         UpdateStats();
         RefreshDisplay();
+
+        // 侧边栏入口初始隐藏，等 SidebarManager.CheckScene 回调后再决定显示
+        RefreshSidebarEntryVisibility();
     }
 
     private void OnEnable()
@@ -126,8 +130,26 @@ public class MenuUI : MonoBehaviour
 
     private void OnEntranceRewardClicked()
     {
-        Debug.Log("MenuUI: 入口有奖 - 请绑定入口奖励界面");
-        // TODO: 打开入口奖励面板
+        if (sidebarUI != null)
+            ShowPanel(sidebarUI.gameObject);
+        else
+            Debug.LogWarning("MenuUI: sidebarUI 未绑定");
+    }
+
+    /// <summary>
+    /// 根据 SidebarManager 状态控制入口有奖按钮显隐：
+    ///   - 宿主不支持侧边栏 → 隐藏
+    ///   - 奖励已领取 → 隐藏
+    ///   - 其他情况 → 显示
+    /// 由 SidebarManager.CheckScene 回调和 MarkRewardClaimed 后调用。
+    /// </summary>
+    public void RefreshSidebarEntryVisibility()
+    {
+        if (entranceRewardButton == null) return;
+
+        bool supported = SidebarManager.Instance != null && SidebarManager.Instance.IsSidebarSupported;
+        bool claimed   = SidebarManager.Instance != null && SidebarManager.Instance.IsRewardClaimed;
+        entranceRewardButton.gameObject.SetActive(supported && !claimed);
     }
 
     private void OnAddGiftClicked()

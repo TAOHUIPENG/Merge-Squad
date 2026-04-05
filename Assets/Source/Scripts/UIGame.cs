@@ -81,4 +81,6 @@ public class UIGame : MonoBehaviour
         else
             Debug.LogWarning("UIGame: exitGameUI 未绑定");
     }
+
+
 }

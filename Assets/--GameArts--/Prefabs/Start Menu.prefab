@@ -4743,6 +4743,7 @@ MonoBehaviour:
   shareUI: {fileID: 0}
   staminaPopupUI: {fileID: 0}
   coinPopupUI: {fileID: 0}
+  sidebarUI: {fileID: 0}
 --- !u!114 &2018047083702995035
 MonoBehaviour:
   m_ObjectHideFlags: 0
