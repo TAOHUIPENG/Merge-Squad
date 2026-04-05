@@ -51,7 +51,7 @@ public class SidebarManager : MonoBehaviour
     public bool IsLaunchedFromSidebar { get; private set; }
 
     /// <summary>侧边栏奖励是否已领取（持久化，领取后入口永久隐藏）</summary>
-    public bool IsRewardClaimed => PlayerPrefs.GetInt(RewardClaimedKey, 0) == 1;
+    public bool IsRewardClaimed => TTPlayerPrefs.GetInt(RewardClaimedKey, 0) == 1;
 
     /// <summary>
     /// 从侧边栏返回事件已触发、但尚未被 SidebarRewardUI 消费的挂起标志。

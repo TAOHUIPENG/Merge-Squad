@@ -23,7 +23,7 @@ public class AwardShortcutUI : MonoBehaviour
 
     // ── 公开状态 ──────────────────────────────────────────
     /// <summary>桌面奖励是否已领取（持久化）</summary>
-    public bool IsRewardClaimed => PlayerPrefs.GetInt(RewardClaimedKey, 0) == 1;
+    public bool IsRewardClaimed => TTPlayerPrefs.GetInt(RewardClaimedKey, 0) == 1;
 
     [Header("按钮")]
     [SerializeField] private Button claimButton;
