@@ -32,7 +32,7 @@ public class SidebarRewardUI : MonoBehaviour
         // 所以必须在 Awake 里订阅，而非 Start——因为 inactive 对象的 Start 不会执行。
         SidebarManager.OnSidebarReturned += OnSidebarReturned;
 
-       // gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     private void Start()
@@ -77,8 +77,10 @@ public class SidebarRewardUI : MonoBehaviour
     private void OnClaim()
     {
         _db.Money.Value += 1000;
-        // TODO: 实现奖励发放逻辑（例如：发放金币、道具等）
-        Debug.Log("[SidebarRewardUI] 领取奖励（逻辑待实现）");
+        Debug.Log($"[SidebarRewardUI] 领取侧边栏奖励，金币+1000，当前={_db.Money.Value}");
+
+        // 刷新 MenuUI 金币显示
+        FindObjectOfType<MenuUI>()?.OnCoinChanged();
 
         // 标记已领取（持久化），并通知 MenuUI 隐藏入口按钮
         SidebarManager.Instance?.MarkRewardClaimed();
