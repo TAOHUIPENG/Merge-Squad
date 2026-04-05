@@ -444,10 +444,12 @@ MonoBehaviour:
     adUnitId: 1ihea1gji64ca5c5c2
   - sceneName: WinDouble
     adUnitId: aih2d3he56gi1ki4ob
-  - sceneName: UpgradeAll
+  - sceneName: upgrade_all
     adUnitId: 5fddfh9h7mgg1df068
-  - sceneName: UpgradeSkill
+  - sceneName: upgrade_skill
     adUnitId: 7nipoek2583259368j
+  - sceneName: FreeCoin
+    adUnitId: 1l5727mjf5f094ek4a
   _interstitialAdId: YOUR_INTERSTITIAL_AD_ID
 --- !u!4 &1042131177
 Transform:
