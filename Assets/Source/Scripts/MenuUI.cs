@@ -1,4 +1,5 @@
 using D2D.Core;
+using TTSDK;
 using UnityEngine;
 using UnityEngine.UI;
 using static D2D.Utilities.CommonGameplayFacade;
@@ -30,7 +31,8 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button addGiftButton;          // 添加有礼
     [SerializeField] private Button shareButton;            // 分享
     [SerializeField] private Button addStaminaButton;       // 加体力
-    [SerializeField] private Button addCoinButton;       // 加金币
+    [SerializeField] private Button addCoinButton;          // 加金币
+    [SerializeField] private Button addDesktopButton;       // 添加桌面
 
     // ---- 显示信息 ----
     [Header("信息显示")]
@@ -46,6 +48,7 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private StaminaPopupUI staminaPopupUI;
     [SerializeField] private CoinPopupUI coinPopupUI;
     [SerializeField] private SidebarUI sidebarUI;
+    [SerializeField] private AwardShortcutUI awardShortcutUI;
 
 
     private void Start()
@@ -77,12 +80,16 @@ public class MenuUI : MonoBehaviour
         addCoinButton?.onClick.AddListener(OnAddCoinClicked);
 
         freeCoinButton.Button.onClick.AddListener(OnFreeCoinClicked);
-        
+
+        addDesktopButton?.onClick.AddListener(OnAddDesktopClicked);
+
         UpdateStats();
         RefreshDisplay();
 
         // 侧边栏入口初始隐藏，等 SidebarManager.CheckScene 回调后再决定显示
         RefreshSidebarEntryVisibility();
+        // 添加桌面按钮：已领取过奖励则隐藏
+        RefreshDesktopButtonVisibility();
     }
 
     private void OnEnable()
@@ -150,6 +157,47 @@ public class MenuUI : MonoBehaviour
         bool supported = SidebarManager.Instance != null && SidebarManager.Instance.IsSidebarSupported;
         bool claimed   = SidebarManager.Instance != null && SidebarManager.Instance.IsRewardClaimed;
         entranceRewardButton.gameObject.SetActive(supported && !claimed);
+    }
+
+    /// <summary>
+    /// 刷新"添加桌面"按钮显隐：奖励已领取则永久隐藏。
+    /// 由 Start、AwardShortcutUI.MarkRewardClaimed 后调用。
+    /// </summary>
+    public void RefreshDesktopButtonVisibility()
+    {
+        if (addDesktopButton == null) return;
+        bool claimed = AwardShortcutUI.Instance != null && AwardShortcutUI.Instance.IsRewardClaimed;
+        addDesktopButton.gameObject.SetActive(!claimed);
+    }
+
+    /// <summary>
+    /// 点击"添加桌面"：
+    ///   1. 调用 TT.AddShortcut 弹出系统添加桌面提示
+    ///   2. 在回调中用 TT.CheckShortcut 二次确认是否真正添加成功
+    ///   3. 确认成功后弹出 AwardShortcutUI 奖励界面
+    /// </summary>
+    private void OnAddDesktopClicked()
+    {
+        TT.AddShortcut(bSuccess =>
+        {
+            Debug.Log("[MenuUI] OnCreateShortcut : " + bSuccess);
+
+            // 无论系统回调成功与否，都用 CheckShortcut 做最终确认
+            TT.CheckShortcut(exist =>
+            {
+                Debug.Log("[MenuUI] Shortcut exist: " + exist);
+                if (exist)
+                {
+                    // 隐藏按钮
+                    RefreshDesktopButtonVisibility();
+                    // 弹出奖励界面
+                    if (awardShortcutUI != null)
+                        ShowPanel(awardShortcutUI.gameObject);
+                    else
+                        AwardShortcutUI.Instance?.Show();
+                }
+            });
+        });
     }
 
     private void OnAddGiftClicked()
