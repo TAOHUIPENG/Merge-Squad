@@ -411,5 +411,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewardText: {fileID: 1148315055556702540}
-  yOffset: 1.8
+  yOffset: 1.2
   simulateRewardOnAdFail: 0
