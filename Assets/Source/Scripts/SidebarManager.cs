@@ -276,8 +276,8 @@ public class SidebarManager : MonoBehaviour
     /// </summary>
     public void MarkRewardClaimed()
     {
-        PlayerPrefs.SetInt(RewardClaimedKey, 1);
-        PlayerPrefs.Save();
+        TTPlayerPrefs.SetInt(RewardClaimedKey, 1);
+        TTPlayerPrefs.Save();
         NotifySidebarSupportChanged();  // 通知 MenuUI 刷新（隐藏入口）
     }
 }

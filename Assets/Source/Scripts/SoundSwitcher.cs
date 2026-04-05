@@ -20,22 +20,22 @@ public class SoundSwitcher : MonoBehaviour
     }
     private void Start()
     {
-        float masterValue = PlayerPrefs.GetFloat(MasterVolume, 0);
+        float masterValue = TTPlayerPrefs.GetFloat(MasterVolume, 0);
         audioMixer.SetFloat(MasterVolume, masterValue);
     }
 
     private void SwitchSound()
     {
-        float value = PlayerPrefs.GetFloat(MasterVolume, 0);
+        float value = TTPlayerPrefs.GetFloat(MasterVolume, 0);
 
-        PlayerPrefs.SetFloat(MasterVolume, value == 0 ? Mute : 0);
+        TTPlayerPrefs.SetFloat(MasterVolume, value == 0 ? Mute : 0);
 
-        audioMixer.SetFloat(MasterVolume, PlayerPrefs.GetFloat(MasterVolume, 0));
+        audioMixer.SetFloat(MasterVolume, TTPlayerPrefs.GetFloat(MasterVolume, 0));
 
         UpdateCross();
     }
     private void UpdateCross()
     {
-        cross.gameObject.SetActive(PlayerPrefs.GetFloat(MasterVolume, 0) == Mute);
+        cross.gameObject.SetActive(TTPlayerPrefs.GetFloat(MasterVolume, 0) == Mute);
     }
 }

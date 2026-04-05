@@ -5,7 +5,7 @@ using UnityEngine;
 namespace D2D.Databases
 {
     /// <summary>
-    /// 通用数据容器，使用 PlayerPrefs 持久化。
+    /// 通用数据容器，使用 TTPlayerPrefs 持久化（抖音环境自动路由到 TTSDK.TTStorage）。
     /// 支持 int / float / string；其他类型通过 JSON 序列化后存为字符串。
     /// </summary>
     public class DataContainer<T> : TrackableValue<T>
@@ -37,8 +37,8 @@ namespace D2D.Databases
 
         private T _value;
 
-        /// <summary>PlayerPrefs 中是否存在该键</summary>
-        public bool IsEmpty => !PlayerPrefs.HasKey(_key);
+        /// <summary>存储中是否存在该键</summary>
+        public bool IsEmpty => !TTPlayerPrefs.HasKey(_key);
 
         private readonly string _key;
         private readonly T _defaultValue;
@@ -55,7 +55,7 @@ namespace D2D.Databases
             _alwaysSave = alwaysSave;
         }
 
-        public void Clear() => PlayerPrefs.DeleteKey(_key);
+        public void Clear() => TTPlayerPrefs.DeleteKey(_key);
 
         public void Save() => SaveToPrefs(_value);
 
@@ -66,33 +66,33 @@ namespace D2D.Databases
         private void SaveToPrefs(T value)
         {
             if (typeof(T) == typeof(int))
-                PlayerPrefs.SetInt(_key, Convert.ToInt32(value));
+                TTPlayerPrefs.SetInt(_key, Convert.ToInt32(value));
             else if (typeof(T) == typeof(float))
-                PlayerPrefs.SetFloat(_key, Convert.ToSingle(value));
+                TTPlayerPrefs.SetFloat(_key, Convert.ToSingle(value));
             else if (typeof(T) == typeof(string))
-                PlayerPrefs.SetString(_key, value as string ?? "");
+                TTPlayerPrefs.SetString(_key, value as string ?? "");
             else
-                PlayerPrefs.SetString(_key, JsonUtility.ToJson(new JsonWrapper<T>(value)));
+                TTPlayerPrefs.SetString(_key, JsonUtility.ToJson(new JsonWrapper<T>(value)));
 
-            PlayerPrefs.Save();
+            TTPlayerPrefs.Save();
         }
 
         private T LoadFromPrefs()
         {
-            if (!PlayerPrefs.HasKey(_key))
+            if (!TTPlayerPrefs.HasKey(_key))
                 return _defaultValue;
 
             try
             {
                 if (typeof(T) == typeof(int))
-                    return (T)(object)PlayerPrefs.GetInt(_key);
+                    return (T)(object)TTPlayerPrefs.GetInt(_key);
                 if (typeof(T) == typeof(float))
-                    return (T)(object)PlayerPrefs.GetFloat(_key);
+                    return (T)(object)TTPlayerPrefs.GetFloat(_key);
                 if (typeof(T) == typeof(string))
-                    return (T)(object)PlayerPrefs.GetString(_key);
+                    return (T)(object)TTPlayerPrefs.GetString(_key);
 
                 // 其他复杂类型走 JSON 路径
-                string json = PlayerPrefs.GetString(_key, "");
+                string json = TTPlayerPrefs.GetString(_key, "");
                 if (!string.IsNullOrEmpty(json))
                 {
                     var wrapper = JsonUtility.FromJson<JsonWrapper<T>>(json);

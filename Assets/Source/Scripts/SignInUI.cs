@@ -58,8 +58,8 @@ public class SignInUI : MonoBehaviour
 
     private void LoadData()
     {
-        currentDayIndex = PlayerPrefs.GetInt(DayIndexKey, 0);
-        string lastDate = PlayerPrefs.GetString(LastClaimedDateKey, "");
+        currentDayIndex = TTPlayerPrefs.GetInt(DayIndexKey, 0);
+        string lastDate = TTPlayerPrefs.GetString(LastClaimedDateKey, "");
         string today = System.DateTime.Now.ToString("yyyy-MM-dd");
         hasClaimedToday = (lastDate == today);
     }
@@ -111,15 +111,15 @@ public class SignInUI : MonoBehaviour
 
         // 保存签到进度
         string today = System.DateTime.Now.ToString("yyyy-MM-dd");
-        PlayerPrefs.SetString(LastClaimedDateKey, today);
+        TTPlayerPrefs.SetString(LastClaimedDateKey, today);
 
         currentDayIndex++;
         // 8天签到完毕后重置循环
         if (currentDayIndex >= 8)
             currentDayIndex = 0;
 
-        PlayerPrefs.SetInt(DayIndexKey, currentDayIndex);
-        PlayerPrefs.Save();
+        TTPlayerPrefs.SetInt(DayIndexKey, currentDayIndex);
+        TTPlayerPrefs.Save();
 
         hasClaimedToday = true;
 

@@ -19,23 +19,23 @@ public class VibrationSwitcher : MonoBehaviour
     }
     private void Start()
     {
-        bool isActive = PlayerPrefs.GetFloat(Vibration, 0) == 1;
+        bool isActive = TTPlayerPrefs.GetFloat(Vibration, 0) == 1;
         MMVibrationManager.SetHapticsActive(isActive);
     }
 
     private void SwitchVibration()
     {
-        float value = PlayerPrefs.GetFloat(Vibration, 0);
+        float value = TTPlayerPrefs.GetFloat(Vibration, 0);
 
-        PlayerPrefs.SetFloat(Vibration, value == 0 ? 1 : 0);
+        TTPlayerPrefs.SetFloat(Vibration, value == 0 ? 1 : 0);
 
-        bool isActive = PlayerPrefs.GetFloat(Vibration, 0) == 1;
+        bool isActive = TTPlayerPrefs.GetFloat(Vibration, 0) == 1;
         MMVibrationManager.SetHapticsActive(isActive);
 
         UpdateCross();
     }
     private void UpdateCross()
     {
-        cross.gameObject.SetActive(PlayerPrefs.GetFloat(Vibration, 0) == 1);
+        cross.gameObject.SetActive(TTPlayerPrefs.GetFloat(Vibration, 0) == 1);
     }
 }

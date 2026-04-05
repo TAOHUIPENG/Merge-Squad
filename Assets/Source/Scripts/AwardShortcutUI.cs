@@ -101,8 +101,8 @@ public class AwardShortcutUI : MonoBehaviour
     /// <summary>标记奖励已领取并持久化，然后通知 MenuUI 刷新按钮显隐。</summary>
     private void MarkRewardClaimed()
     {
-        PlayerPrefs.SetInt(RewardClaimedKey, 1);
-        PlayerPrefs.Save();
+        TTPlayerPrefs.SetInt(RewardClaimedKey, 1);
+        TTPlayerPrefs.Save();
         FindObjectOfType<MenuUI>()?.RefreshDesktopButtonVisibility();
     }
 }

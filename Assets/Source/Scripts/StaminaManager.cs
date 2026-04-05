@@ -27,14 +27,14 @@ public static class StaminaManager
     public static int Get()
     {
         ApplyOfflineRecovery();
-        return PlayerPrefs.GetInt(StaminaKey, MaxStamina);
+        return TTPlayerPrefs.GetInt(StaminaKey, MaxStamina);
     }
 
     /// <summary>直接设置体力（会 Clamp 到 [0, Max]）</summary>
     public static void Set(int value)
     {
-        PlayerPrefs.SetInt(StaminaKey, Mathf.Clamp(value, 0, MaxStamina));
-        PlayerPrefs.Save();
+        TTPlayerPrefs.SetInt(StaminaKey, Mathf.Clamp(value, 0, MaxStamina));
+        TTPlayerPrefs.Save();
     }
 
     /// <summary>增加体力</summary>
@@ -54,7 +54,7 @@ public static class StaminaManager
 
     private static void ApplyOfflineRecovery()
     {
-        string tickStr = PlayerPrefs.GetString(LastRecoveryKey, "");
+        string tickStr = TTPlayerPrefs.GetString(LastRecoveryKey, "");
 
         // 首次使用：记录当前时间并返回
         if (string.IsNullOrEmpty(tickStr))
@@ -65,26 +65,25 @@ public static class StaminaManager
 
         if (!long.TryParse(tickStr, out long ticks)) return;
 
-        DateTime lastTime     = new DateTime(ticks, DateTimeKind.Utc);
+        DateTime lastTime      = new DateTime(ticks, DateTimeKind.Utc);
         double   minutesPassed = (DateTime.UtcNow - lastTime).TotalMinutes;
         int      recovered     = (int)(minutesPassed * RecoveryPerMin);
 
         if (recovered <= 0) return;
 
-        int current    = PlayerPrefs.GetInt(StaminaKey, MaxStamina);
+        int current    = TTPlayerPrefs.GetInt(StaminaKey, MaxStamina);
         int newStamina = Mathf.Min(current + recovered, MaxStamina);
-        PlayerPrefs.SetInt(StaminaKey, newStamina);
+        TTPlayerPrefs.SetInt(StaminaKey, newStamina);
 
         // 基准时间只向前推「实际回复的分钟数」，保留余数
         DateTime newBase = lastTime.AddMinutes(recovered);
-        PlayerPrefs.SetString(LastRecoveryKey, newBase.Ticks.ToString());
-        PlayerPrefs.Save();
+        TTPlayerPrefs.SetString(LastRecoveryKey, newBase.Ticks.ToString());
+        TTPlayerPrefs.Save();
     }
 
     private static void SaveRecoveryTimestamp()
     {
-        PlayerPrefs.SetString(LastRecoveryKey, DateTime.UtcNow.Ticks.ToString());
-        PlayerPrefs.Save();
+        TTPlayerPrefs.SetString(LastRecoveryKey, DateTime.UtcNow.Ticks.ToString());
+        TTPlayerPrefs.Save();
     }
 }
-

@@ -55,10 +55,10 @@ namespace D2D.Databases
                 if (_UnlockedMembers != null)
                     return _UnlockedMembers;
 
-                if (PlayerPrefs.HasKey(UnlockedMembersKey))
+                if (TTPlayerPrefs.HasKey(UnlockedMembersKey))
                 {
                     var wrapper = JsonUtility.FromJson<StringListWrapper>(
-                        PlayerPrefs.GetString(UnlockedMembersKey));
+                        TTPlayerPrefs.GetString(UnlockedMembersKey));
                     _UnlockedMembers = wrapper?.list ?? new List<string>();
                 }
                 else
@@ -76,8 +76,8 @@ namespace D2D.Databases
         public void SaveMembers()
         {
             var wrapper = new StringListWrapper { list = _UnlockedMembers ?? new List<string>() };
-            PlayerPrefs.SetString(UnlockedMembersKey, JsonUtility.ToJson(wrapper));
-            PlayerPrefs.Save();
+            TTPlayerPrefs.SetString(UnlockedMembersKey, JsonUtility.ToJson(wrapper));
+            TTPlayerPrefs.Save();
         }
 
         [Serializable]
@@ -94,7 +94,7 @@ namespace D2D.Databases
             new DataContainer<int>("PassedLevels", 0);
 
         public readonly TrackableValue<float> Money =
-            new TrackableValue<float>(value: 0, firstGet: () => PlayerPrefs.GetInt("Money"));
+            new TrackableValue<float>(value: 0, firstGet: () => TTPlayerPrefs.GetInt("Money"));
 
         public readonly DataContainer<int> LastSceneNumber =
             new DataContainer<int>("LastSceneNumber", 1);
@@ -124,8 +124,8 @@ namespace D2D.Databases
 
         private void SaveMoney(float val)
         {
-            PlayerPrefs.SetInt("Money", Money.Value.Round());
-            PlayerPrefs.Save();
+            TTPlayerPrefs.SetInt("Money", Money.Value.Round());
+            TTPlayerPrefs.Save();
         }
 
         private void OnApplicationQuit()
@@ -149,20 +149,20 @@ namespace D2D.Databases
         /// <summary>重置所有游戏进度数据</summary>
         public static void Clear()
         {
-            PlayerPrefs.SetInt("ReloadsCount", 0);
-            PlayerPrefs.SetInt("CompletedLevelsPerSession", 0);
-            PlayerPrefs.SetInt("PassedLevels", 0);
-            PlayerPrefs.SetInt("LastSceneNumber", 1);
-            PlayerPrefs.SetFloat("PowerIncreasePercent", 0f);
-            PlayerPrefs.SetFloat("FireRateDecreasePercent", 0f);
-            PlayerPrefs.SetFloat("PowerIncreaseLevel", 0f);
-            PlayerPrefs.SetFloat("FireRateDecreaseLevel", 0f);
-            PlayerPrefs.SetFloat("UnlockableItemProgress", 0f);
-            PlayerPrefs.SetString("UnlockableItem", "");
-            PlayerPrefs.SetString("LastUnlockedMember", "");
-            PlayerPrefs.SetString("UnlockedMembers", "");
-            PlayerPrefs.SetInt("Money", 0);
-            PlayerPrefs.Save();
+            TTPlayerPrefs.SetInt("ReloadsCount", 0);
+            TTPlayerPrefs.SetInt("CompletedLevelsPerSession", 0);
+            TTPlayerPrefs.SetInt("PassedLevels", 0);
+            TTPlayerPrefs.SetInt("LastSceneNumber", 1);
+            TTPlayerPrefs.SetFloat("PowerIncreasePercent", 0f);
+            TTPlayerPrefs.SetFloat("FireRateDecreasePercent", 0f);
+            TTPlayerPrefs.SetFloat("PowerIncreaseLevel", 0f);
+            TTPlayerPrefs.SetFloat("FireRateDecreaseLevel", 0f);
+            TTPlayerPrefs.SetFloat("UnlockableItemProgress", 0f);
+            TTPlayerPrefs.SetString("UnlockableItem", "");
+            TTPlayerPrefs.SetString("LastUnlockedMember", "");
+            TTPlayerPrefs.SetString("UnlockedMembers", "");
+            TTPlayerPrefs.SetInt("Money", 0);
+            TTPlayerPrefs.Save();
         }
     }
 }
