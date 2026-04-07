@@ -149,7 +149,12 @@ namespace D2D.Gameplay
                 });
             });
             
-            _gameData.grayCorpseLifetime.AfterCall(() => transform.DOScale(0, .3f).onComplete += ImmediateDeath);
+            var capturedTransform = transform;
+            _gameData.grayCorpseLifetime.AfterCall(() =>
+            {
+                if (capturedTransform == null) return;
+                capturedTransform.DOScale(0, .3f).OnComplete(ImmediateDeath);
+            });
 
             /*var rb = this.Get<Rigidbody>(); 
             rb.isKinematic = false;

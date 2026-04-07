@@ -103,7 +103,8 @@ public class SquadComponent : GameStateMachineUser
 
         foreach (var member in squadMembers)
         {
-            member.SetDanceAnimation(member.animations.DanceAnimations.Random());
+            if (member.animations.DanceAnimations != null && member.animations.DanceAnimations.Length > 0)
+                member.SetDanceAnimation(member.animations.DanceAnimations.Random());
         }
     }
     #endregion
@@ -456,6 +457,11 @@ public class SquadComponent : GameStateMachineUser
                     continue;
                 }
 
+                if (member.navMesh == null || !member.navMesh.isActiveAndEnabled || !member.navMesh.isOnNavMesh)
+                {
+                    continue;
+                }
+
                 if (index == 0)
                 {
                     member.navMesh.ResetPath();
@@ -488,6 +494,11 @@ public class SquadComponent : GameStateMachineUser
             memberIndex++;
 
             if (member.IsEvolving)
+            {
+                continue;
+            }
+
+            if (member.navMesh == null || !member.navMesh.isActiveAndEnabled || !member.navMesh.isOnNavMesh)
             {
                 continue;
             }

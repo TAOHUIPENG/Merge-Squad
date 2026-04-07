@@ -197,6 +197,7 @@ namespace D2D.Core
                         (_coreData.stateMachineOptimizedMode && subs[i].owner == null))
                     {
                         subs.RemoveAt(i);
+                        i--;
                     }
                 }
                 // If all is ok, execute subscriber`s action 

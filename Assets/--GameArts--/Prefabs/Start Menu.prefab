@@ -4735,6 +4735,7 @@ MonoBehaviour:
   shareButton: {fileID: 1287206803539614658}
   addStaminaButton: {fileID: 4472730516985825149}
   addCoinButton: {fileID: 8912982521954641410}
+  addDesktopButton: {fileID: 0}
   staminaText: {fileID: 5590659411764259706}
   coinText: {fileID: 2634290673705532196}
   userAvatar: {fileID: 297042533708401111}
@@ -4744,6 +4745,7 @@ MonoBehaviour:
   staminaPopupUI: {fileID: 0}
   coinPopupUI: {fileID: 0}
   sidebarUI: {fileID: 0}
+  awardShortcutUI: {fileID: 0}
 --- !u!114 &2018047083702995035
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -135,6 +135,7 @@ public class GameProgress : GameStateMachineUser
 
             if (levelTime >= _levelSO.TotalDuration)
             {
+                isFinished = true;
                 _stateMachine.Push(new WinState());
                 WinUI.Instance?.Show();
             }

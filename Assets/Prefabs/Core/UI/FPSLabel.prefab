@@ -146,16 +146,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f9551f8fd00494d985b6cfca160136d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _label: {fileID: 584191985800254637}
+  _label: {fileID: 0}
   _preText: 'FPS: '
---- !u!114 &584191985800254637 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8730304988018668785, guid: 13317336afb054841927496e0bebbfd2, type: 3}
-  m_PrefabInstance: {fileID: 8156917937889697884}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 584191985800254632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

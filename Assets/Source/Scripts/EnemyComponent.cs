@@ -55,7 +55,7 @@ public class EnemyComponent : Unit, IHittable
 
         health.Died += Die;
 
-        _stateMachine.On<WinState>(Die);
+        _stateMachine.On<WinState>(DieOnWin);
     }
     public virtual void Update()
     {
@@ -112,8 +112,14 @@ public class EnemyComponent : Unit, IHittable
     }
     internal virtual void Die()
     {
-        var powerUp = Instantiate(powerUpPrefab, transform.position, Quaternion.identity).Get<XPPoint>();
-        powerUp.Init(transform.position, _formation.transform.position);
+        if (isDead)
+            return;
+
+        if (powerUpPrefab != null)
+        {
+            var powerUp = Instantiate(powerUpPrefab, transform.position, Quaternion.identity).Get<XPPoint>();
+            powerUp.Init(transform.position, _formation.transform.position);
+        }
 
         _enemySpawn.EnemyDied();
 
@@ -121,9 +127,12 @@ public class EnemyComponent : Unit, IHittable
 
         isDead = true;
 
-        navMesh.isStopped = true;
-        navMesh.ResetPath();
-        navMesh.velocity = Vector3.zero;
+        if (navMesh != null && navMesh.isActiveAndEnabled && navMesh.isOnNavMesh)
+        {
+            navMesh.isStopped = true;
+            navMesh.ResetPath();
+            navMesh.velocity = Vector3.zero;
+        }
         navMesh.enabled = false;
 
         canvas.HealthBar.gameObject.SetActive(false);
@@ -138,6 +147,27 @@ public class EnemyComponent : Unit, IHittable
         DHaptic.HapticLight();
 
         Destroy(gameObject, 3f);
+    }
+
+    /// <summary>
+    /// 游戏胜利时调用的轻量版死亡：跳过动画和掉落物，直接销毁对象，
+    /// 避免 Animancer 在后续帧的回调中触发 WebGL IL2CPP 的 WASM null 函数指针崩溃。
+    /// </summary>
+    internal virtual void DieOnWin()
+    {
+        if (isDead)
+            return;
+
+        isDead = true;
+        _enemySpawn.EnemyDied();
+
+        if (navMesh != null && navMesh.isActiveAndEnabled)
+            navMesh.enabled = false;
+
+        if (capsCollider != null)
+            capsCollider.enabled = false;
+
+        Destroy(gameObject);
     }
     internal void DespawnEnemy()
     {

@@ -23118,6 +23118,7 @@ MonoBehaviour:
   getDistance: 1
   pickUpForce: 30
   pickUpVFX: {fileID: 152484, guid: 23fc589b73077394db72d954703e8d1c, type: 3}
+  _xpFlyDuration: 0.35
 --- !u!135 &1182785951
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -39371,7 +39372,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242458265094481696}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 1.37, y: 17.07833, z: -8.259999}
+  m_LocalPosition: {x: 0, y: 17.07833, z: -8.169999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -40871,7 +40872,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4361158456786051210}
   m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 1.37, y: 8.071068, z: -7.161068}
+  m_LocalPosition: {x: 0, y: 8.071068, z: -7.071068}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -42344,6 +42345,7 @@ MonoBehaviour:
   shareButton: {fileID: 0}
   addStaminaButton: {fileID: 0}
   addCoinButton: {fileID: 0}
+  addDesktopButton: {fileID: 0}
   staminaText: {fileID: 0}
   coinText: {fileID: 0}
   userAvatar: {fileID: 0}
@@ -42352,6 +42354,8 @@ MonoBehaviour:
   shareUI: {fileID: 0}
   staminaPopupUI: {fileID: 0}
   coinPopupUI: {fileID: 0}
+  sidebarUI: {fileID: 0}
+  awardShortcutUI: {fileID: 0}
 --- !u!114 &1576837838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44407,7 +44411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8628902878471643410}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 1.37, y: 17.07833, z: -8.259999}
+  m_LocalPosition: {x: 0, y: 17.07833, z: -8.169999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -44769,7 +44773,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df869ec334d3de4c8ebdf514cfdfd93, type: 2}
   - {fileID: 11400000, guid: 90b35ac5d6fa7e44cb8e116e73287f63, type: 2}
   - {fileID: 11400000, guid: be85b933bfcb7864c810ad9878b20d4e, type: 2}
-  adButtonIndex: 0
+  adGatedUpgrade: {fileID: 0}
+  rewardedSceneUpgradeAll: upgrade_all
+  rewardedSceneAdGated: upgrade_skill
   isDebug: 0
   debugUpgrades:
   - {fileID: 11400000, guid: 91d3a7cd9ecbef64288089c2c1b736c4, type: 2}
@@ -45267,7 +45273,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reviveAdButton: {fileID: 9090547368564060267}
   doubleRewardButton: {fileID: 8913325532542108302}
+  homeButton: {fileID: 0}
+  menuSceneName: 
   currentCoinsText: {fileID: 2750220631505549259}
+  doubleRewardText: {fileID: 0}
   panelRoot: {fileID: 0}
 --- !u!224 &5998555857743366821 stripped
 RectTransform:
@@ -45576,7 +45585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 521448630483895385, guid: 724f6e159ecfe4949bcb593520f99990, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 50.75
       objectReference: {fileID: 0}
     - target: {fileID: 521448630483895385, guid: 724f6e159ecfe4949bcb593520f99990, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -45728,7 +45737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7724517635184647403, guid: 724f6e159ecfe4949bcb593520f99990, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 50.75
       objectReference: {fileID: 0}
     - target: {fileID: 7724517635184647403, guid: 724f6e159ecfe4949bcb593520f99990, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -45902,7 +45911,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewardText: {fileID: 6342937884322448613}
+  doubleRewardText: {fileID: 0}
   doubleRewardButton: {fileID: 2104710538514563331}
+  homeButton: {fileID: 0}
+  menuSceneName: 
   panelRoot: {fileID: 0}
 --- !u!114 &6342937884322448613 stripped
 MonoBehaviour:
@@ -47042,6 +47054,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cancelButton: {fileID: 3766394653653104875}
   confirmButton: {fileID: 1933188477690443718}
+  closeButton: {fileID: 0}
   panelRoot: {fileID: 0}
   menuSceneName: 
 --- !u!224 &1636697689506925794 stripped

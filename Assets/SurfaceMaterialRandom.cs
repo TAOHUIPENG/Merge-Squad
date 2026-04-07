@@ -15,7 +15,7 @@ public class SurfaceMaterialRandom : MonoBehaviour
 
         foreach (var item in meshRenderers)
         {
-            item.material = currentMaterial;
+          //  item.material = currentMaterial;
         }
     }
 }

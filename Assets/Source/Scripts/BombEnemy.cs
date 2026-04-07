@@ -36,8 +36,11 @@ public class BombEnemy : EnemyComponent
     }
     internal override void Die()
     {
-        var powerUp = Instantiate(powerUpPrefab, transform.position, Quaternion.identity).Get<XPPoint>();
-        powerUp.Init(transform.position, _formation.transform.position);
+        if (powerUpPrefab != null)
+        {
+            var powerUp = Instantiate(powerUpPrefab, transform.position, Quaternion.identity).Get<XPPoint>();
+            powerUp.Init(transform.position, _formation.transform.position);
+        }
 
         _db.Money.Value += deathReward;
 
