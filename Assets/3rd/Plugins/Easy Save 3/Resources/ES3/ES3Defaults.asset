@@ -45,7 +45,6 @@ MonoBehaviour:
     - MoreMountains.Feedbacks.PostProcessing
     - TTWebGL
     - ToonyColorsPro2.Demo
-    - AppsFlyer
     - MoreMountains.Feedbacks.MMTools
     - MoreMountains.Feedbacks.TextMeshPro
     - Animancer.Examples
@@ -87,7 +86,6 @@ MonoBehaviour:
     - MoreMountains.Tools.Feedbacks.Editor
     - MoreMountains.NiceVibrations.Editor
     - ToonyColorsPro.Demo.Editor
-    - AppsFlyer.Editor
     - RahulCorleone.MagicLayout.Editor
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
