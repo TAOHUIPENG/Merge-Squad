@@ -416,6 +416,9 @@ public class MenuUI : MonoBehaviour
         firePowerIncreaseButton.PriceText.text = $"{_gameData.PowerNextUpgradePrice}";
         fireRateIncreaseButton.PriceText.text = $"{_gameData.FireNextUpgradePrice} ";
         freeCoinButton.PriceText.text = $"+{CalcFreeCoinReward()}";
+        
+        LayoutRebuilder.ForceRebuildLayoutImmediate(fireRateIncreaseButton.transform as RectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(firePowerIncreaseButton.transform as RectTransform);
 
         CheckForDeactivatingButtons();
     }

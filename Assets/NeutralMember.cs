@@ -29,7 +29,12 @@ public class NeutralMember : Unit
     private void Start()
     {
         // 在场上生成时，按概率显示 x2 广告指示器（等 SquadComponent 的 Awake 完成后执行）
-        Get<SquadMember>().TryShowDoubleRewardUI();
+        var member = Get<SquadMember>();
+        member.TryShowDoubleRewardUI();
+
+        // x2 UI 未生成时，确保进化文本可见（激活中间节点链）
+        if (!member.HasPendingDoubleReward)
+            member.EnsureEvolutionTextVisible();
     }
 
     private void Update()

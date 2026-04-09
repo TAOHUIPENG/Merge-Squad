@@ -82,6 +82,9 @@ public class SquadMember : Unit
 
         if (canvas != null && canvas.HealthBar != null)
             canvas.HealthBar.SetHealth(health);
+
+        // 所有角色（包括待吃的中立角色）在 Awake 时就设置进化文本，默认可见
+        EnsureEvolutionTextVisible();
     }
     private void Update()
     {
@@ -133,8 +136,30 @@ public class SquadMember : Unit
 
         animancer.Play(animations.Idle);
 
-        if (canvas != null && canvas.EvolutionText != null)
-            canvas.EvolutionText.text = $"{Mathf.Pow(2, EvolveLevel + 1)}";
+        // 显示进化文本，并激活 Canvas 内所有中间父节点（防止中间层默认关闭）
+        if (!HasPendingDoubleReward)
+            EnsureEvolutionTextVisible();
+    }
+
+    /// <summary>
+    /// 激活 CharacterCanvas 内从根到 EvolutionText 的完整节点链，并设置文本内容。
+    /// 有 x2 UI 时不调用此方法，以保持文本隐藏。
+    /// </summary>
+    public void EnsureEvolutionTextVisible()
+    {
+        if (canvas == null || canvas.EvolutionText == null) return;
+
+        canvas.EvolutionText.text = $"{Mathf.Pow(2, EvolveLevel + 1)}";
+
+        // 从 EvolutionText 向上遍历到 CharacterCanvas 根节点，激活途中所有未激活的父对象
+        var t = canvas.EvolutionText.transform;
+        while (t != null && t != canvas.transform)
+        {
+            if (!t.gameObject.activeSelf)
+                t.gameObject.SetActive(true);
+            t = t.parent;
+        }
+        canvas.EvolutionText.gameObject.SetActive(true);
     }
     public virtual void Shoot(Transform target)
     {
@@ -194,9 +219,14 @@ public class SquadMember : Unit
             // UI 被销毁（超时/Dismiss）时自动清空引用，防止 MissingReferenceException
             _spawnedDoubleRewardUI = null;
             health.Died -= DismissDoubleRewardUI;
+            // x2 UI 消失后恢复显示进化文本
+            SetEvolutionTextVisible(true);
         });
 
         health.Died += DismissDoubleRewardUI;
+
+        // 有 x2 UI 时隐藏进化文本，避免与 x2 按钮重叠
+        SetEvolutionTextVisible(false);
     }
 
     /// <summary>
@@ -221,5 +251,15 @@ public class SquadMember : Unit
             _spawnedDoubleRewardUI.Dismiss();
         _spawnedDoubleRewardUI = null;
         health.Died -= DismissDoubleRewardUI;
+    }
+
+    /// <summary>控制头顶进化文本的显隐，有 x2 UI 时隐藏以免重叠。</summary>
+    private void SetEvolutionTextVisible(bool visible)
+    {
+        if (canvas == null || canvas.EvolutionText == null) return;
+        if (visible)
+            EnsureEvolutionTextVisible();
+        else
+            canvas.EvolutionText.gameObject.SetActive(false);
     }
 }
