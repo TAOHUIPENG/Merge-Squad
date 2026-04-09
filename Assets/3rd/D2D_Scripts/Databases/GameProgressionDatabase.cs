@@ -99,6 +99,10 @@ namespace D2D.Databases
         public readonly DataContainer<int> LastSceneNumber =
             new DataContainer<int>("LastSceneNumber", 1);
 
+        /// <summary>玩家昵称，首次生成后永久存档（格式：用户XXXX）</summary>
+        public readonly DataContainer<string> Nickname =
+            new DataContainer<string>("Nickname", "");
+
         public float TimeOfSceneLoad { get; private set; }
 
         public float TimeElapsedFromSceneLoad => Time.time - TimeOfSceneLoad;
@@ -162,6 +166,7 @@ namespace D2D.Databases
             TTPlayerPrefs.SetString("LastUnlockedMember", "");
             TTPlayerPrefs.SetString("UnlockedMembers", "");
             TTPlayerPrefs.SetInt("Money", 0);
+            TTPlayerPrefs.SetString("Nickname", "");
             TTPlayerPrefs.Save();
         }
     }

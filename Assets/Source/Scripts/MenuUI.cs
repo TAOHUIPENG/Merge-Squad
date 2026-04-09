@@ -322,9 +322,27 @@ public class MenuUI : MonoBehaviour
         if (staminaText != null)
             staminaText.text = $"{StaminaManager.Get()}/{StaminaManager.MaxStamina}";
 
-        // 昵称（默认值，接入SDK后替换）
-        if (nicknameText != null && nicknameText.text == string.Empty)
-            nicknameText.text = "玩家";
+        // 昵称：首次随机生成"用户XXXX"并存档，之后复用存档值
+        if (nicknameText != null)
+            nicknameText.text = GetOrCreateNickname();
+    }
+
+    // ---- 昵称 ----
+
+    /// <summary>
+    /// 读取已存档的昵称；若尚未生成，则随机生成"用户XXXX"（4位数字）并存档。
+    /// </summary>
+    private string GetOrCreateNickname()
+    {
+        var saved = _db.Nickname.Value;
+        if (!string.IsNullOrEmpty(saved))
+            return saved;
+
+        // 首次：随机生成 1000~9999 的 4 位数字
+        int suffix = UnityEngine.Random.Range(1000, 10000);
+        string nickname = $"用户{suffix}";
+        _db.Nickname.Value = nickname;   // DataContainer 赋值即自动存档
+        return nickname;
     }
 
     // ---- 原有升级逻辑（保持不变） ----
