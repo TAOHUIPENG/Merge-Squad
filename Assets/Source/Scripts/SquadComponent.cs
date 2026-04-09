@@ -104,7 +104,11 @@ public class SquadComponent : GameStateMachineUser
         foreach (var member in squadMembers)
         {
             if (member.animations.DanceAnimations != null && member.animations.DanceAnimations.Length > 0)
-                member.SetDanceAnimation(member.animations.DanceAnimations.Random());
+            {
+                var clip = member.animations.DanceAnimations.Random();
+                if (clip != null)
+                    member.SetDanceAnimation(clip);
+            }
         }
     }
     #endregion

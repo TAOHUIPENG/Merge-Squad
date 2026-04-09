@@ -71,6 +71,8 @@ namespace D2D.Databases
                 TTPlayerPrefs.SetFloat(_key, Convert.ToSingle(value));
             else if (typeof(T) == typeof(string))
                 TTPlayerPrefs.SetString(_key, value as string ?? "");
+            else if (typeof(T) == typeof(bool))
+                TTPlayerPrefs.SetInt(_key, Convert.ToBoolean(value) ? 1 : 0);
             else
                 TTPlayerPrefs.SetString(_key, JsonUtility.ToJson(new JsonWrapper<T>(value)));
 
@@ -90,6 +92,8 @@ namespace D2D.Databases
                     return (T)(object)TTPlayerPrefs.GetFloat(_key);
                 if (typeof(T) == typeof(string))
                     return (T)(object)TTPlayerPrefs.GetString(_key);
+                if (typeof(T) == typeof(bool))
+                    return (T)(object)(TTPlayerPrefs.GetInt(_key) != 0);
 
                 // 其他复杂类型走 JSON 路径
                 string json = TTPlayerPrefs.GetString(_key, "");

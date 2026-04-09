@@ -1,4 +1,5 @@
 using D2D;
+using D2D.Core;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -23,6 +24,12 @@ public class RadialWeapon : MonoBehaviour
     private void Awake()
     {
         _radialWeapon = this;
+
+        // Stop cycling weapons on game end so they no longer spawn projectile VFX
+        // (NovaLightningBlue etc.) whose DOTweenAnimation targets can be null in
+        // WebGL, leading to invalid WASM function-table calls and a hard crash.
+        _stateMachine.On<WinState>(() => enabled = false);
+        _stateMachine.On<LoseState>(() => enabled = false);
     }
 
     private void Update()

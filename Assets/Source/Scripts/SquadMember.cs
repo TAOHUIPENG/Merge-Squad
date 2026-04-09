@@ -152,6 +152,7 @@ public class SquadMember : Unit
     }
     public void SetDanceAnimation(AnimationClip animation)
     {
+        if (animation == null) return;
         animancer.Play(animation, 0.5f);
     }
     public void Evolve(SquadMember evolveTarget)

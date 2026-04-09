@@ -103,6 +103,7 @@ namespace D2D
 
         protected override void OnGameWin()
         {
+            if (_isLastLevelWin == null) return;
             _isLastLevelWin.Value = true;
         }
     }

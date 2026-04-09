@@ -1,6 +1,7 @@
 using D2D;
 using D2D.Core;
 using D2D.Utilities;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -136,6 +137,11 @@ public class GameProgress : GameStateMachineUser
             if (levelTime >= _levelSO.TotalDuration)
             {
                 isFinished = true;
+                // Kill all running DOTween tweens before notifying subscribers.
+                // Stale tweens on enemies/effects being destroyed during the win sequence
+                // can hold invalid WASM function-table pointers, causing a
+                // "null function or function signature mismatch" crash in WebGL.
+                DOTween.KillAll();
                 _stateMachine.Push(new WinState());
                 WinUI.Instance?.Show();
             }

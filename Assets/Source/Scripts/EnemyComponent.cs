@@ -152,11 +152,24 @@ public class EnemyComponent : Unit, IHittable
     /// <summary>
     /// 游戏胜利时调用的轻量版死亡：跳过动画和掉落物，直接销毁对象，
     /// 避免 Animancer 在后续帧的回调中触发 WebGL IL2CPP 的 WASM null 函数指针崩溃。
+    ///
+    /// 已死亡敌人（isDead=true）处于死亡动画中，挂有 Destroy(gameObject, 3f) 的延迟销毁。
+    /// 若不立即销毁，Animancer 会在后续帧继续更新其 PlayableGraph，
+    /// 动画结束时通过 IL2CPP 虚函数表（invoke_vii/invoke_iiii）调用空指针，
+    /// 在 WebGL 中产生 "null function or function signature mismatch" 崩溃。
+    /// 对已死亡敌人调用 Destroy(gameObject) 可提前覆盖延迟销毁，立即停止 Animancer 更新。
     /// </summary>
     internal virtual void DieOnWin()
     {
         if (isDead)
+        {
+            // 已死亡但仍在播放死亡动画的敌人：停止 Animancer 并立即销毁，
+            // 防止 Playables 虚调用在 WebGL 引发 WASM null 函数指针崩溃。
+            if (animancer != null)
+                animancer.Stop();
+            Destroy(gameObject);
             return;
+        }
 
         isDead = true;
         _enemySpawn.EnemyDied();
@@ -167,6 +180,8 @@ public class EnemyComponent : Unit, IHittable
         if (capsCollider != null)
             capsCollider.enabled = false;
 
+        if (animancer != null)
+            animancer.Stop();
         Destroy(gameObject);
     }
     internal void DespawnEnemy()
