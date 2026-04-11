@@ -10,6 +10,11 @@ public class NeutralsSpawn : Unit
     [SerializeField] private float spawnCooldown = .8f;
     [SerializeField] private NeutralMember neutralMember;
 
+    [Tooltip("新角色与已有角色的最小生成距离")]
+    [SerializeField] private float minSpawnDistance = 4.5f;
+    [Tooltip("找不到合适位置时的最大重试次数")]
+    [SerializeField] private int maxSpawnAttempts = 10;
+
     private Camera currentCamera;
 
     private int currentAmount;
@@ -41,27 +46,33 @@ public class NeutralsSpawn : Unit
     }
     private void SpawnNeutral()
     {
-        float xPos;
-        float yPos;
-        float sign = Mathf.Sign(Random.Range(-1, 2));
-
-        if (Random.Range(0, 100) > 50)
+        for (int attempt = 0; attempt < maxSpawnAttempts; attempt++)
         {
-            xPos = 0.5f + 0.6f * sign;
-            yPos = Random.Range(0, 100) / 100f;
-        }
-        else
-        {
-            xPos = Random.Range(0, 100) / 100f;
-            yPos = 0.5f + 0.6f * sign;
-        }
+            float xPos;
+            float yPos;
+            float sign = Mathf.Sign(Random.Range(-1, 2));
 
-        Vector3 direction = Camera.main.ViewportToWorldPoint(new Vector3(xPos, yPos, -10));
+            if (Random.Range(0, 100) > 50)
+            {
+                xPos = 0.5f + 0.6f * sign;
+                yPos = Random.Range(0, 100) / 100f;
+            }
+            else
+            {
+                xPos = Random.Range(0, 100) / 100f;
+                yPos = 0.5f + 0.6f * sign;
+            }
 
-        Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.position - direction);
+            Vector3 direction = Camera.main.ViewportToWorldPoint(new Vector3(xPos, yPos, -10));
+            Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.position - direction);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _gameData.GroundLayer))
-        {
+            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _gameData.GroundLayer))
+                continue;
+
+            // 检查与场上所有待吃角色的距离
+            if (IsTooCloseToOthers(hit.point))
+                continue;
+
             NeutralMember neutralMemberComp = Instantiate(neutralMember.gameObject, hit.point, Quaternion.identity).Get<NeutralMember>();
             neutralMemberComp.OnDespawn += DespawnNeutral;
 
@@ -69,6 +80,18 @@ public class NeutralsSpawn : Unit
             memberComp.Init();
 
             currentAmount++;
+            return;
         }
+        // 超出重试次数，本次跳过，等下次 Update 再尝试
+    }
+
+    private bool IsTooCloseToOthers(Vector3 candidatePos)
+    {
+        foreach (var existing in FindObjectsOfType<NeutralMember>())
+        {
+            if (Vector3.Distance(candidatePos, existing.transform.position) < minSpawnDistance)
+                return true;
+        }
+        return false;
     }
 }
