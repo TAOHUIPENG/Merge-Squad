@@ -169,7 +169,7 @@ public class EnemySpawn : Unit
             var enemyGO = Instantiate(enemy, hit.point, Quaternion.identity);
             var enemyComp = enemyGO.GetComponent<EnemyComponent>();
 
-            var gameProgressMultiplier = 1 + _gameProgress.GetValueForTimeFinish() / 2; 
+            var gameProgressMultiplier = 1 + _gameProgress.GetValueForTimeFinish() * 0.7f; 
 
             var multiplier = Mathf.Pow(_gameData.baseSpeedMultiplier, _db.PassedLevels.Value) * gameProgressMultiplier;
             var speedLevel = Mathf.Min(_gameData.enemyMaxSpeedLevel, _db.PassedLevels.Value);
