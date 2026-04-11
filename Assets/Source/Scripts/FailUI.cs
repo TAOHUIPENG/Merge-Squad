@@ -32,6 +32,7 @@ public class FailUI : MonoBehaviour
     [SerializeField] private Transform panelRoot;
 
     private float earnedCoins;
+    private float _levelStartMoney;
 
     private void Awake()
     {
@@ -41,6 +42,8 @@ public class FailUI : MonoBehaviour
 
     private void Start()
     {
+        _levelStartMoney = _db != null ? _db.Money.Value : 0;
+
         if (reviveAdButton != null)
             reviveAdButton.onClick.AddListener(OnReviveAd);
 
@@ -62,7 +65,7 @@ public class FailUI : MonoBehaviour
 
     public void Show()
     {
-        earnedCoins = _db != null ? _db.Money.Value : 0;
+        earnedCoins = _db != null ? _db.Money.Value - _levelStartMoney : 0;
         RefreshUI();
         UIGame.Instance?.Hide();
         gameObject.SetActive(true);
@@ -156,7 +159,7 @@ public class FailUI : MonoBehaviour
 
     private void OnGoHome()
     {
-        _db.Money.Value += earnedCoins;
+        // 金币在敌人死亡时已实时写入 _db.Money，无需再次累加
         GoToMenu();
     }
 

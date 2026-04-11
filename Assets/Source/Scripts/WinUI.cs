@@ -29,6 +29,7 @@ public class WinUI : MonoBehaviour
     [SerializeField] private Transform panelRoot;
 
     private float earnedReward;
+    private float _levelStartMoney;
 
     private void Awake()
     {
@@ -38,6 +39,8 @@ public class WinUI : MonoBehaviour
 
     private void Start()
     {
+        _levelStartMoney = _db != null ? _db.Money.Value : 0;
+
         if (doubleRewardButton != null)
             doubleRewardButton.onClick.AddListener(OnDoubleReward);
 
@@ -56,7 +59,7 @@ public class WinUI : MonoBehaviour
 
     public void Show()
     {
-        earnedReward = _db != null ? _db.Money.Value : 0;
+        earnedReward = _db != null ? _db.Money.Value - _levelStartMoney : 0;
         RefreshUI();
         UIGame.Instance?.Hide();
         // 通关奖励 +2 体力
@@ -97,7 +100,7 @@ public class WinUI : MonoBehaviour
 
     private void OnGoHome()
     {
-        _db.Money.Value += earnedReward;
+        // 金币在敌人死亡时已实时写入 _db.Money，无需再次累加
         GoToMenu();
     }
 
