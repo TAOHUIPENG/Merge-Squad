@@ -349,8 +349,6 @@ public class MenuUI : MonoBehaviour
 
     private void IncreasePowerUp()
     {
-        if (_db.PowerIncreaseLevel.Value >= _gameData.maxLevelUpgrade) return;
-
         bool isEnoughForPower = _db.Money.Value >= _gameData.PowerNextUpgradePrice;
 
         if (isEnoughForPower)
@@ -364,19 +362,15 @@ public class MenuUI : MonoBehaviour
         {
             AdManager.Instance.ShowRewarded(AdManager.Scenes.IncreasePowerUp, () =>
             {
-                _db.PowerIncreaseLevel.Value = Mathf.Min(
-                    (int)_db.PowerIncreaseLevel.Value + 2, _gameData.maxLevelUpgrade);
+                _db.PowerIncreaseLevel.Value += 2;
                 UpdateStats();
                 RefreshDisplay();
             });
         }
-   
     }
 
     private void IncreaseFireRate()
     {
-        if (_db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade) return;
-
         bool isEnoughForRate = _db.Money.Value >= _gameData.FireNextUpgradePrice;
 
         if (isEnoughForRate)
@@ -390,13 +384,11 @@ public class MenuUI : MonoBehaviour
         {
             AdManager.Instance.ShowRewarded(AdManager.Scenes.IncreaseFireRate, () =>
             {
-                _db.FireRateDecreaseLevel.Value = Mathf.Min(
-                    (int)_db.FireRateDecreaseLevel.Value + 2, _gameData.maxLevelUpgrade);
+                _db.FireRateDecreaseLevel.Value += 2;
                 UpdateStats();
                 RefreshDisplay();
             });
         }
-      
     }
 
     private void CheckForDeactivatingButtons()
@@ -404,20 +396,10 @@ public class MenuUI : MonoBehaviour
         bool isEnoughForRate  = _db.Money.Value >= _gameData.FireNextUpgradePrice;
         bool isEnoughForPower = _db.Money.Value >= _gameData.PowerNextUpgradePrice;
 
-        bool isRateMaxLevel  = _db.FireRateDecreaseLevel.Value >= _gameData.maxLevelUpgrade;
-        bool isPowerMaxLevel = _db.PowerIncreaseLevel.Value    >= _gameData.maxLevelUpgrade;
-
-        // 满级时广告图标和升级价格均隐藏
-        fireRateUpgradeAds.SetActive(!isEnoughForRate  && !isRateMaxLevel);
-        firePowerUpgradeAds.SetActive(!isEnoughForPower && !isPowerMaxLevel);
-        fireRateUpgradeTxt.SetActive(isEnoughForRate   && !isRateMaxLevel);
-        firePowerUpgradeTxt.SetActive(isEnoughForPower  && !isPowerMaxLevel);
-
-        if (isRateMaxLevel)
-            fireRateIncreaseButton.PriceText.text = "已满级";
-
-        if (isPowerMaxLevel)
-            firePowerIncreaseButton.PriceText.text = "已满级";
+        fireRateUpgradeAds.SetActive(!isEnoughForRate);
+        firePowerUpgradeAds.SetActive(!isEnoughForPower);
+        fireRateUpgradeTxt.SetActive(isEnoughForRate);
+        firePowerUpgradeTxt.SetActive(isEnoughForPower);
     }
 
     private void UpdateStats()

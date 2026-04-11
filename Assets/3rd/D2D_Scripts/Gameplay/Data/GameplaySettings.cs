@@ -66,27 +66,12 @@ namespace D2D.Gameplay
 
         private float CalculateUpgradePrice(float l)
         {
-            var step = boostPriceStep;
+            // 每五级费用提升 1.5 倍（无等级上限）
+            int tier = Mathf.FloorToInt(l / 5);
+            float tierMultiplier = Mathf.Pow(1.5f, tier);
 
-            if (l >= 5)
-                step *= 1.2f;
-            
-            if (l >= 7)
-                step *= 1.5f;
-
-            var result = boostInitialPricee + l * step * 2;
-
-            if (l > 3)
-                result *= 1.2f;
-
-            if (l.Almost(1))
-                result = 140;
-            
-            if (l.Almost(2))
-                result = 250;
-
-                // if (l >= 6)
-                // result *= 1.1f;
+            // 当前梯度内线性递增，再乘以梯度倍率
+            float result = (boostInitialPricee + (l % 5) * boostPriceStep) * tierMultiplier;
 
             return result.Round();
         }
