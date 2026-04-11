@@ -115,7 +115,9 @@ public class EnemyComponent : Unit, IHittable
         if (isDead)
             return;
 
-        if (powerUpPrefab != null)
+        bool giveReward = Random.value < 0.5f;
+
+        if (giveReward && powerUpPrefab != null)
         {
             var powerUp = Instantiate(powerUpPrefab, transform.position, Quaternion.identity).Get<XPPoint>();
             powerUp.Init(transform.position, _formation.transform.position);
@@ -123,7 +125,8 @@ public class EnemyComponent : Unit, IHittable
 
         _enemySpawn.EnemyDied();
 
-        _db.Money.Value += deathReward;
+        if (giveReward)
+            _db.Money.Value += deathReward;
 
         isDead = true;
 
