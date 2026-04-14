@@ -59,7 +59,7 @@ public class WinUI : MonoBehaviour
 
     public void Show()
     {
-        earnedReward = _db != null ? _db.Money.Value - _levelStartMoney : 0;
+        earnedReward = _db != null ? Mathf.Max(0, _db.Money.Value - _levelStartMoney) : 0;
         RefreshUI();
         UIGame.Instance?.Hide();
         // 通关奖励 +2 体力

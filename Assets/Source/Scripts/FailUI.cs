@@ -65,7 +65,7 @@ public class FailUI : MonoBehaviour
 
     public void Show()
     {
-        earnedCoins = _db != null ? _db.Money.Value - _levelStartMoney : 0;
+        earnedCoins = _db != null ? Mathf.Max(0, _db.Money.Value - _levelStartMoney) : 0;
         RefreshUI();
         UIGame.Instance?.Hide();
         gameObject.SetActive(true);
