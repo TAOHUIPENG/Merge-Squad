@@ -36,15 +36,13 @@ public class BombEnemy : EnemyComponent
     }
     internal override void Die()
     {
-        bool giveReward = Random.value < 0.5f;
-
-        if (giveReward && powerUpPrefab != null)
+        if (powerUpPrefab != null)
         {
             var powerUp = Instantiate(powerUpPrefab, transform.position, Quaternion.identity).Get<XPPoint>();
             powerUp.Init(transform.position, _formation.transform.position);
         }
 
-        if (giveReward)
+        if (_db != null)
             _db.Money.Value += deathReward;
 
         Explode();

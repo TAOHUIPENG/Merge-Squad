@@ -30,6 +30,7 @@ public class WinUI : MonoBehaviour
 
     private float earnedReward;
     private float _levelStartMoney;
+    private float _settlementSourceMoney;
 
     private void Awake()
     {
@@ -59,7 +60,8 @@ public class WinUI : MonoBehaviour
 
     public void Show()
     {
-        earnedReward = _db != null ? Mathf.Max(0, _db.Money.Value - _levelStartMoney) : 0;
+        _settlementSourceMoney = _db != null ? _db.Money.Value : _levelStartMoney;
+        earnedReward = BattleRewardCalculator.CalculateSettlementReward(_levelStartMoney, _settlementSourceMoney);
         RefreshUI();
         UIGame.Instance?.Hide();
         // 通关奖励 +2 体力
@@ -93,14 +95,16 @@ public class WinUI : MonoBehaviour
     private void OnDoubleRewardAdComplete()
     {
         if (_db != null)
-            _db.Money.Value += earnedReward;
+            _db.Money.Value = BattleRewardCalculator.CalculateFinalBalance(_levelStartMoney, _settlementSourceMoney, true);
 
         GoToMenu();
     }
 
     private void OnGoHome()
     {
-        // 金币在敌人死亡时已实时写入 _db.Money，无需再次累加
+        if (_db != null)
+            _db.Money.Value = BattleRewardCalculator.CalculateFinalBalance(_levelStartMoney, _settlementSourceMoney, false);
+
         GoToMenu();
     }
 

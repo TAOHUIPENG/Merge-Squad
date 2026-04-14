@@ -33,6 +33,7 @@ public class FailUI : MonoBehaviour
 
     private float earnedCoins;
     private float _levelStartMoney;
+    private float _settlementSourceMoney;
 
     private void Awake()
     {
@@ -65,7 +66,8 @@ public class FailUI : MonoBehaviour
 
     public void Show()
     {
-        earnedCoins = _db != null ? Mathf.Max(0, _db.Money.Value - _levelStartMoney) : 0;
+        _settlementSourceMoney = _db != null ? _db.Money.Value : _levelStartMoney;
+        earnedCoins = BattleRewardCalculator.CalculateSettlementReward(_levelStartMoney, _settlementSourceMoney);
         RefreshUI();
         UIGame.Instance?.Hide();
         gameObject.SetActive(true);
@@ -152,14 +154,16 @@ public class FailUI : MonoBehaviour
     private void OnDoubleRewardAdComplete()
     {
         if (_db != null)
-            _db.Money.Value += earnedCoins;
+            _db.Money.Value = BattleRewardCalculator.CalculateFinalBalance(_levelStartMoney, _settlementSourceMoney, true);
 
         GoToMenu();
     }
 
     private void OnGoHome()
     {
-        // 金币在敌人死亡时已实时写入 _db.Money，无需再次累加
+        if (_db != null)
+            _db.Money.Value = BattleRewardCalculator.CalculateFinalBalance(_levelStartMoney, _settlementSourceMoney, false);
+
         GoToMenu();
     }
 

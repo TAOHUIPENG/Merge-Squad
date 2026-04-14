@@ -18861,6 +18861,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 918739463}
+  backgroundMusicClip: {fileID: 8300000, guid: ab0e2d31014c7b844905549b0f76784f, type: 3}
+  backgroundMusicVolume: 0.18
 --- !u!82 &918739463
 AudioSource:
   m_ObjectHideFlags: 0

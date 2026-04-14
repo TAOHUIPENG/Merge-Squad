@@ -94,7 +94,7 @@ namespace D2D.Databases
             new DataContainer<int>("PassedLevels", 0);
 
         public readonly TrackableValue<float> Money =
-            new TrackableValue<float>(value: 0, firstGet: () => TTPlayerPrefs.GetInt("Money"));
+            new TrackableValue<float>(value: 0, firstGet: () => TTPlayerPrefs.GetInt("Money", 600));
 
         public readonly DataContainer<int> LastSceneNumber =
             new DataContainer<int>("LastSceneNumber", 1);
@@ -165,7 +165,7 @@ namespace D2D.Databases
             TTPlayerPrefs.SetString("UnlockableItem", "");
             TTPlayerPrefs.SetString("LastUnlockedMember", "");
             TTPlayerPrefs.SetString("UnlockedMembers", "");
-            TTPlayerPrefs.SetInt("Money", 0);
+            TTPlayerPrefs.SetInt("Money", 600);
             TTPlayerPrefs.SetString("Nickname", "");
             TTPlayerPrefs.Save();
         }
